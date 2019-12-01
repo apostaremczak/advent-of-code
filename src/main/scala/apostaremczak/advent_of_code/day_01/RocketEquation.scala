@@ -3,7 +3,7 @@ package apostaremczak.advent_of_code.day_01
 import apostaremczak.advent_of_code.Puzzle
 
 object RocketEquation extends Puzzle[Int] {
-  private val puzzleInput: List[Int] = input(1)
+  val day = 1
 
   /**
     * Fuel required to launch a given module is based on its mass.
@@ -16,7 +16,7 @@ object RocketEquation extends Puzzle[Int] {
     * What is the sum of the fuel requirements for all of the modules on your spacecraft?
     */
   def fuelRequiredForModules: Int =
-    puzzleInput.map(moduleFuelRequired).sum
+    input.map(moduleFuelRequired).sum
 
   /**
     * Fuel itself requires fuel just like a module - take its mass,
@@ -41,7 +41,7 @@ object RocketEquation extends Puzzle[Int] {
     * spacecraft when also taking into account the mass of the added fuel?
     */
   def totalFuelRequired: Int =
-    puzzleInput.map(recursiveFuelRequired).sum
+    input.map(recursiveFuelRequired).sum
 
   def main(args: Array[String]): Unit = {
     println(s"Part 1 solution: $fuelRequiredForModules")
