@@ -19,19 +19,19 @@ object Wire {
 
     val newPorts = pathComponent.direction match {
       case Up =>
-        (current.y to current.y + pathComponent.units)
+        (current.y + 1 to current.y + pathComponent.units)
           .map(Port(current.x, _))
 
       case Down =>
-        (current.y to current.y - pathComponent.units by -1)
+        (current.y - 1 to current.y - pathComponent.units by -1)
           .map(Port(current.x, _))
 
       case Left =>
-        (current.x to current.x - pathComponent.units by -1)
+        (current.x - 1 to current.x - pathComponent.units by -1)
           .map(Port(_, current.y))
 
       case Right =>
-        (current.x to current.x + pathComponent.units)
+        (current.x + 1 to current.x + pathComponent.units)
           .map(Port(_, current.y))
     }
 
