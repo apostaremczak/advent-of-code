@@ -8,6 +8,12 @@ case class Wire(path: IndexedSeq[Port]) {
     */
   def intersect(that: Wire): Set[Port] =
     path.toSet.intersect(that.path.toSet).diff(Set(Port.central))
+
+  /**
+    * What's the number of steps required by a wire to reach a certain port for the first time?
+    */
+  def numStepsToPort(port: Port): Int =
+    path.indexOf(port)
 }
 
 object Wire {

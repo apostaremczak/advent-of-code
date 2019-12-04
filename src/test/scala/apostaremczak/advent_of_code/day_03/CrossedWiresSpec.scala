@@ -25,7 +25,6 @@ class CrossedWiresSpec
   }
 
   "Wire" must {
-
     "extend path by a path component when going up" in {
       val resultPath =
         Wire.addPathComponent(IndexedSeq(Port.central), PathComponent(Up, 3))
@@ -67,14 +66,51 @@ class CrossedWiresSpec
 
       wire1.intersect(wire2) must equal(intersection)
     }
+
+    "calculate the number of steps required to reach a port" in {
+      Wire(List("U3", "D3")).numStepsToPort(Port(0, 1)) must equal(1)
+      Wire(List("R8", "U5", "L5", "D3")).numStepsToPort(Port(3, 0)) must equal(
+        3
+      )
+    }
   }
 
   "CrossedWires" must {
-    "find minimal distance between two crossed wired and the central port" in {
-      val wire1 = Wire(List("R8", "U5", "L5", "D3"))
-      val wire2 = Wire(List("U7", "R6", "D4", "L4"))
+    val wire1 = Wire(List("R8", "U5", "L5", "D3"))
+    val wire2 = Wire(List("U7", "R6", "D4", "L4"))
+    val wire3 =
+      Wire(List("R75", "D30", "R83", "U83", "L12", "D49", "R71", "U7", "L72"))
+    val wire4 =
+      Wire(List("U62", "R66", "U55", "R34", "D71", "R55", "D58", "R83"))
+    val wire5 = Wire(
+      List(
+        "R98",
+        "U47",
+        "R26",
+        "D63",
+        "R33",
+        "U87",
+        "L62",
+        "D20",
+        "R33",
+        "U53",
+        "R51"
+      )
+    )
+    val wire6 = Wire(
+      List("U98", "R91", "D20", "R16", "D67", "R40", "U7", "R15", "U6", "R7")
+    )
 
+    "find minimal distance between two crossed wired and the central port" in {
       CrossedWires.distanceBetweenCrossings(wire1, wire2) must equal(6)
+      CrossedWires.distanceBetweenCrossings(wire3, wire4) must equal(159)
+      CrossedWires.distanceBetweenCrossings(wire5, wire6) must equal(135)
+    }
+
+    "find smallest number of steps to intersection" in {
+      CrossedWires.smallestDistanceToCrossing(wire1, wire2) must equal(30)
+      CrossedWires.smallestDistanceToCrossing(wire3, wire4) must equal(610)
+      CrossedWires.smallestDistanceToCrossing(wire5, wire6) must equal(410)
     }
   }
 }
