@@ -1,19 +1,17 @@
 package apostaremczak.advent_of_code.day_02
 
-import apostaremczak.advent_of_code.Puzzle
+import apostaremczak.advent_of_code.CommaSeparatedPuzzle
 
 import scala.annotation.{switch, tailrec}
 
-object ProgramAlarm extends Puzzle[String] {
+object ProgramAlarm extends CommaSeparatedPuzzle[Int] {
   type Memory = IndexedSeq[Int]
 
   val day         = 2
   val magicResult = 19690720
 
   def initialMemory(noun: Int, verb: Int): Memory =
-    input.head
-      .split(",")
-      .map(augmentString(_).toInt)
+    input
       .toIndexedSeq
       .updated(1, noun)
       .updated(2, verb)
