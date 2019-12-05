@@ -7,7 +7,7 @@ case class Password(text: String) {
     rangeStart <= text.toInt && text.toInt <= rangeEnd
 
   def hasDoubleRepetition: Boolean =
-    text.toSeq.sliding(2, 1).map(_.unwrap).exists { _.toSet.size == 2 }
+    text.toSeq.sliding(2, 1).map(_.unwrap).exists { _.toSet.size == 1 }
 
   def hasOnlyDoubleRepetitions: Boolean = { ??? }
 
