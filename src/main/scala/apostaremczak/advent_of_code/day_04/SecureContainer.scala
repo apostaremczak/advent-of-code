@@ -9,15 +9,16 @@ object SecureContainer extends Puzzle[String] {
   val rangeEnd: Int   = 706948
 
   /**
-  * Part 1: More than two repetitions are accepted.
-   */
-  def countPartiallyValidPasswords: Int = (rangeStart to rangeEnd).count { pass =>
-    Password(pass.toString).isPartiallyValid(rangeStart, rangeEnd)
+    * Part 1: More than two repetitions are accepted.
+    */
+  def countPartiallyValidPasswords: Int = (rangeStart to rangeEnd).count {
+    pass =>
+      Password(pass.toString).isPartiallyValid(rangeStart, rangeEnd)
   }
 
   /**
-   * Part 2: Only two repetitions are accepted.
-   */
+    * Part 2: Only two repetitions are accepted.
+    */
   def countValidPasswords: Int = (rangeStart to rangeEnd).count { pass =>
     Password(pass.toString).isValid(rangeStart, rangeEnd)
   }
