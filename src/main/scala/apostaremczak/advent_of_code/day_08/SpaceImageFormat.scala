@@ -28,6 +28,5 @@ object SpaceImageFormat extends Puzzle[String] {
   def main(args: Array[String]): Unit = {
     println(s"Solution to part 1: ${verifyImageEncoding(biosPasswordImage)}")
     println(s"Solution to part 2:\n${biosPasswordImage.render}")
-    println(s"Example:\n${SpaceImage(2, 2, "0222112222120000").render}")
   }
 }
