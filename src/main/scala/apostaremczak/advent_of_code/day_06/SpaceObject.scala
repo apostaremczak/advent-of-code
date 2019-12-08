@@ -2,7 +2,7 @@ package apostaremczak.advent_of_code.day_06
 
 import apostaremczak.advent_of_code.day_06.OrbitMapUtils.OrbitMap
 
-case class SpaceObject(parentName: Option[String]) {
+case class SpaceObject(name: String, parentName: Option[String]) {
 
   /**
     * Distance (in direct space objects) from center of mass
@@ -22,4 +22,21 @@ case class SpaceObject(parentName: Option[String]) {
 
   def orbitsCount(implicit orbitMap: OrbitMap): Int =
     directOrbits + indirectOrbits
+
+  /**
+    * Find all predecessors of this object, including universal center of mass
+    */
+  def predecessors(implicit orbitMap: OrbitMap): List[SpaceObject] =
+    parentName match {
+      case None => Nil
+      case Some(parentName) =>
+        val parent = orbitMap(parentName)
+        List(parent) ++ parent.predecessors
+    }
+
+  def lastCommonPredecessor(
+      that: SpaceObject
+  )(implicit orbitMap: OrbitMap): SpaceObject =
+    predecessors.intersect(that.predecessors).maxBy(_.distanceFromCenter)
+
 }
