@@ -14,10 +14,10 @@ object SpaceImageFormat extends Puzzle[String] {
     * 1 digits multiplied by the number of 2 digits?
     */
   def verifyImageEncoding(spaceImage: SpaceImage): Int = {
-    val occurrenceCount = spaceImage.layers
+    val fewestZerosLayer = spaceImage.layers
       .minBy(_.count(_ == 0))
 
-    occurrenceCount.count(_ == 1) * occurrenceCount.count(_ == 2)
+    fewestZerosLayer.count(_ == 1) * fewestZerosLayer.count(_ == 2)
   }
 
   def main(args: Array[String]): Unit = {
