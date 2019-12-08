@@ -9,13 +9,15 @@ case class Password(text: String) {
   def hasDoubleRepetition: Boolean =
     text.toSeq.sliding(2, 1).map(_.unwrap).exists { _.toSet.size == 1 }
 
-  def hasOnlyDoubleRepetitions: Boolean = { ??? }
+  def hasOnlyDoubleRepetitions: Boolean =
+    text.toSeq
+      .groupBy(identity)
+      .values
+      .map(_.size)
+      .exists(_ == 2)
 
   def isMonotonic: Boolean =
-    text.toSeq.sliding(2, 1).map(_.unwrap).forall { pair: String =>
-      val Array(first, second) = pair.toArray.map(_.asDigit)
-      first <= second
-    }
+    text.toSeq == text.toSeq.sorted
 
   /**
     * It is a six-digit number.
