@@ -16,13 +16,8 @@ object SpaceImageFormat extends Puzzle[String] {
   def verifyImageEncoding(spaceImage: SpaceImage): Int = {
     val occurrenceCount = spaceImage.layers
       .minBy(_.count(_ == 0))
-      .groupBy(identity)
-      .map {
-        case (digit, digitSeq) =>
-          (digit, digitSeq.size)
-      }
 
-    occurrenceCount.getOrElse(1, 0) * occurrenceCount.getOrElse(2, 0)
+    occurrenceCount.count(_ == 1) * occurrenceCount.count(_ == 2)
   }
 
   def main(args: Array[String]): Unit = {
