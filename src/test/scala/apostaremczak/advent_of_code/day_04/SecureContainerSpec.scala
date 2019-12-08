@@ -11,11 +11,12 @@ class SecureContainerSpec extends AnyWordSpec with Matchers {
       Password("123789").isPartiallyValid(0, 133789) must be(false)
     }
 
-    "verify that is is valid" in {
+    "verify that it is valid" in {
       Password("112233").isValid(0, 122233) must be(true)
       Password("123444").isValid(0, 124444) must be(false)
       // Even though 1 is repeated more than twice, it still contains a double 22
       Password("111122").isValid(0, 121122) must be(true)
+      Password("111222").isValid(0, 121122) must be(false)
     }
   }
 }
