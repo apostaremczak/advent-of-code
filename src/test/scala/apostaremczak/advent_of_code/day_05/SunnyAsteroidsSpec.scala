@@ -26,13 +26,15 @@ class SunnyAsteroidsSpec extends AnyWordSpec with Matchers {
         val posMode3 :: posMode2 :: posMode1 :: _ =
           f"${memory.instructions(0)}%05d".map(_.asDigit).toList
 
-        val result = SunnyAsteroids.executeBinaryOperation(
-          memory,
-          0,
-          _ * _,
-          posMode1,
-          posMode2
-        ).instructions
+        val result = SunnyAsteroids
+          .executeBinaryOperation(
+            memory,
+            0,
+            _ * _,
+            posMode1,
+            posMode2
+          )
+          .instructions
 
         val expectedResult = IndexedSeq(1002, 4, 3, 4, 99)
 
