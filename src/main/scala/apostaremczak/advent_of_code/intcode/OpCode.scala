@@ -21,7 +21,7 @@ object OpCode {
           case _ :: 3 :: Nil =>
             OpCode(InputWriter, List(Immediate))
           case _ :: 4 :: Nil =>
-            OpCode(OutputUpdater, List(Positional))
+            OpCode(OutputUpdater, List(paramMode1))
           case _ :: 5 :: Nil =>
             OpCode(IfTrueJumper, List(paramMode1, paramMode2))
           case _ :: 6 :: Nil =>
