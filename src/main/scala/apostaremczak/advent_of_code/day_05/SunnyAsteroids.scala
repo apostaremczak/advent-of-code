@@ -89,7 +89,7 @@ object SunnyAsteroids extends CommaSeparatedPuzzle[Int] {
         else
           readInstructions(
             memory,
-            address + 2,
+            address + 3,
             outputs
           )
 
@@ -104,7 +104,7 @@ object SunnyAsteroids extends CommaSeparatedPuzzle[Int] {
         else
           readInstructions(
             memory,
-            address + 2,
+            address + 3,
             outputs
           )
 
@@ -114,7 +114,7 @@ object SunnyAsteroids extends CommaSeparatedPuzzle[Int] {
       case posMode3 :: posMode2 :: posMode1 :: _ :: 7 :: Nil =>
         val first  = memory.get(address + 1, posMode1)
         val second = memory.get(address + 2, posMode2)
-        val third  = memory.get(address + 3, posMode3)
+        val third  = memory.get(address + 3, Immediate)
         val newMemory =
           if (first < second)
             memory.updated(third, 1)
@@ -133,7 +133,7 @@ object SunnyAsteroids extends CommaSeparatedPuzzle[Int] {
       case posMode3 :: posMode2 :: posMode1 :: _ :: 8 :: Nil =>
         val first  = memory.get(address + 1, posMode1)
         val second = memory.get(address + 2, posMode2)
-        val third  = memory.get(address + 3, posMode3)
+        val third  = memory.get(address + 3, Immediate)
         val newMemory =
           if (first == second)
             memory.updated(third, 1)
