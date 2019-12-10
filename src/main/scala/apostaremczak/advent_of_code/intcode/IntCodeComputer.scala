@@ -6,17 +6,16 @@ import scala.annotation.tailrec
 
 class IntCodeComputer(memory: Memory) {
   @tailrec
-  private def readInstruction(state: State): List[Int] = {
+  private def readInstruction(state: State): (Memory, List[Int]) = {
     state.opCode.operation match {
-      case Halt      => state.outputs
+      case Halt      => (state.memory, state.outputs)
       case operation => readInstruction(operation.calculate(state))
     }
   }
 
-  def allOutputs(computerInput: Int): List[Int] = {
-    val initialState = State(memory, input = computerInput)
-    readInstruction(initialState)
-  }
+  def runProgram(computerInput: Int): (Memory, List[Int]) =
+    readInstruction(State(memory, input = computerInput))
 
-  def diagnosticCode(computerInput: Int): Int = allOutputs(computerInput).last
+  def diagnosticCode(computerInput: Int): Int =
+    runProgram(computerInput)._2.last
 }
