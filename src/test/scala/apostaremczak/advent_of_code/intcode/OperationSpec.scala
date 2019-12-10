@@ -27,7 +27,7 @@ class OperationSpec extends AnyWordSpec with Matchers {
       }
 
       "executing InputWriter" in {
-        val state = State(IndexedSeq(3, 0), input = 1)
+        val state = State(IndexedSeq(3, 0), input = List(1))
 
         InputWriter.calculate(state).memory.instructions must equal(
           IndexedSeq(1, 0)

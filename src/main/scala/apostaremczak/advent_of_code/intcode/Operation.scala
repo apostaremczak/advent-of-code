@@ -52,8 +52,9 @@ object InputWriter extends Operation {
   def execute(state: State)(inputs: List[Int]): State = inputs match {
     case x1 :: Nil =>
       state.copy(
-        state.memory.updated(x1, state.input),
-        state.instructionPointer + 2
+        state.memory.updated(x1, state.input.head),
+        state.instructionPointer + 2,
+        input = state.input.drop(1)
       )
   }
 }

@@ -14,8 +14,14 @@ class IntCodeComputer(memory: Memory) {
   }
 
   def runProgram(computerInput: Int): (Memory, List[Int]) =
+    readInstruction(State(memory, input = List(computerInput)))
+
+  def runProgram(computerInput: List[Int]): (Memory, List[Int]) =
     readInstruction(State(memory, input = computerInput))
 
   def diagnosticCode(computerInput: Int): Int =
+    runProgram(computerInput)._2.last
+
+  def diagnosticCode(computerInput: List[Int]): Int =
     runProgram(computerInput)._2.last
 }
