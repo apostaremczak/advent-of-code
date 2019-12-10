@@ -8,7 +8,14 @@ class IntCodeComputer(memory: Memory) {
   @tailrec
   private def readInstruction(state: State): State = {
     state.opCode.operation match {
-      case Halt      => state
+      case Halt        => state
+      case InputWriter =>
+        // If there's no input currently buffered and to be taken,
+        // stop the machine and potentially wait for new input
+        state.input match {
+          case Nil => state
+          case _   => readInstruction(InputWriter.calculate(state))
+        }
       case operation => readInstruction(operation.calculate(state))
     }
   }
