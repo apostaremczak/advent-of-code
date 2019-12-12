@@ -4,14 +4,8 @@ case class Moon(
     position: SpaceVector,
     velocity: SpaceVector = SpaceVector(0, 0, 0)
 ) {
-  private def axisGravity(axis1: Int, axis2: Int): Int = {
-    if (axis1 > axis2)
-      -1
-    else if (axis1 == axis2)
-      0
-    else
-      1
-  }
+  private def axisGravity(axis1: Int, axis2: Int): Int =
+    math.signum(axis2 - axis1)
 
   def applyGravityEffect(that: Moon): SpaceVector =
     SpaceVector(
