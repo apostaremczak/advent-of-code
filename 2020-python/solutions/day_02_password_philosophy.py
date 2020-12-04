@@ -60,6 +60,6 @@ def part_2(inputs: List[PasswordContainer]) -> int:
 
 
 if __name__ == '__main__':
-    puzzle_input = read_puzzle_input("../puzzle_inputs/day_02.csv")
+    puzzle_input = read_puzzle_input("../puzzle_inputs/day_02.txt")
     print(f"Solution to part 1: {part_1(puzzle_input)}")
     print(f"Solution to part 2: {part_2(puzzle_input)}")

@@ -38,6 +38,6 @@ def part_2(forest: List[TreeRow]) -> int:
 
 
 if __name__ == '__main__':
-    trees = read_puzzle_input("../puzzle_inputs/day_03.csv")
+    trees = read_puzzle_input("../puzzle_inputs/day_03.txt")
     print(f"Solution to part 1: {part_1(trees)}")
     print(f"Solution to part 2: {part_2(trees)}")
