@@ -10,6 +10,7 @@ class Bag:
         bag_name, content_details = matches.groups()
         self.name = bag_name
         self.contained_bags = {}
+        self.can_contain_gold = None
         for num_bags, name in re.findall(r"(\d) (\D+) bag", content_details):
             self.contained_bags[name] = int(num_bags)
 
@@ -21,12 +22,16 @@ def read_puzzle_input(input_file_path: str) -> Dict[str, Bag]:
 
 
 def can_reach_shiny_gold(current_bag: Bag, all_bags: Dict[str, Bag]) -> bool:
+    if current_bag.can_contain_gold is not None:
+        return current_bag.can_contain_gold
+
     for bag_name in current_bag.contained_bags:
-        if bag_name == SHINY_GOLD:
+        if bag_name == SHINY_GOLD \
+                or can_reach_shiny_gold(all_bags[bag_name], all_bags):
+            current_bag.can_contain_gold = True
             return True
-        bag = all_bags.get(bag_name)
-        if bag is not None and can_reach_shiny_gold(bag, all_bags):
-            return True
+
+    current_bag.can_contain_gold = False
     return False
 
 
@@ -40,7 +45,7 @@ def part_1(all_bags: Dict[str, Bag]) -> int:
 
 def count_children_bags(current_bag: Bag, all_bags: Dict[str, Bag]) -> int:
     return sum(
-        bag_count * (1 + count_children_bags(all_bags.get(bag_name), all_bags))
+        bag_count * (1 + count_children_bags(all_bags[bag_name], all_bags))
         for bag_name, bag_count in current_bag.contained_bags.items()
     )
 
