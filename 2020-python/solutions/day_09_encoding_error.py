@@ -14,17 +14,10 @@ def read_puzzle_input(input_file_path: str) -> List[int]:
         return [int(x) for x in f.readlines()]
 
 
-def is_sum(candidates: Iterable[int], goal: int) -> bool:
-    for x, y in combinations(candidates, 2):
-        if x + y == goal:
-            return True
-    return False
-
-
 def find_first_misfit(numbers: List[int], window_size: int) -> int:
     for number_window in window(numbers, window_size + 1):
         x = number_window[-1]
-        if not is_sum(number_window[:-1], x):
+        if x not in map(sum, combinations(number_window[:-1], 2)):
             return x
 
 
