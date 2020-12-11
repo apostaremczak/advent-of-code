@@ -26,9 +26,7 @@ def occupy_nonadjacent_seats(seats: SeatDict) -> SeatDict:
         for (row, col), seat in seats.items():
             occupied_nearby = sum(
                 seats.get((row + row_i, col + col_i), "") == "#"
-                for row_i in (-1, 0, 1)
-                for col_i in (-1, -0, 1)
-                if (row_i, col_i) != (0, 0)
+                for (row_i, col_i) in VISIBLE_DIRECTIONS
             )
             if seat == "#" and occupied_nearby >= 4:
                 updated_seats[(row, col)] = "L"
