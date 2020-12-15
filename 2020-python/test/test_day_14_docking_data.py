@@ -4,7 +4,7 @@ from solutions.day_14_docking_data import *
 def test_mask_apply():
     value = "000000000000000000000000000000001011"
     mask = Mask("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X")
-    assert mask.apply(value) == "000000000000000000000000000001001001"
+    assert mask.apply(value) == int("000000000000000000000000000001001001", 2)
 
 
 def test_part_1():
