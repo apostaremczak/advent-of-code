@@ -23,7 +23,7 @@ class Field:
 
 class Ticket:
     def __init__(self, config: str, fields: List[Field]):
-        self.field_values = [int(x) for x in config.split(",") if x]
+        self.field_values = [int(x) for x in config.split(",")]
         self.suitable_fields = self._get_suitable_fields(fields)
         self.invalid_values = self._get_invalid_values()
 
@@ -47,15 +47,13 @@ class Ticket:
 
 def read_puzzle_input(input_file_path: str):
     with open(input_file_path, "r") as f:
-        fields, my_ticket, tickets_config = f.read().split("\n\n")
+        fields, my_ticket, nearby = f.read().split("\n\n")
 
     fields = [Field(field_config) for field_config in fields.split("\n")]
     my_ticket = Ticket(my_ticket.split("\n")[1], fields)
-    tickets_config = [
-        Ticket(t, fields) for t in tickets_config.split("\n")[1:] if t
-    ]
+    nearby = [Ticket(t, fields) for t in nearby.strip().split("\n")[1:]]
 
-    return fields, my_ticket, tickets_config
+    return fields, my_ticket, nearby
 
 
 def part_1(tickets: List[Ticket]) -> int:
@@ -79,10 +77,7 @@ def part_2(fields: List[Field], my_ticket: Ticket,
         field = i_fields.pop()
         if field.name.startswith("departure"):
             departure_values.append(my_ticket.field_values[index])
-        matching_fields = [
-            (p, f.difference({field}))
-            for p, f in matching_fields[1:]
-        ]
+        matching_fields = [(p, f - {field}) for p, f in matching_fields[1:]]
 
     return prod(departure_values)
 
