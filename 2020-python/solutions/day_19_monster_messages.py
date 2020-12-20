@@ -1,7 +1,6 @@
 import functools
 import re
-from itertools import product
-from typing import Dict, List, Set
+from typing import Dict, List
 
 
 def read_puzzle_input(input_file_path: str):
@@ -15,46 +14,60 @@ def read_puzzle_input(input_file_path: str):
         matches = re.match(r"^(\d+): (.*)$", rule)
         num, matching_rules = matches.groups()
         alternatives = matching_rules.split(" | ")
-        rule_dict[int(num)] = alternatives
+        rule_dict[num] = alternatives
 
     return rule_dict, messages
 
 
-def parse_all_messages(rule_dict: Dict[int, List[str]]) -> Set[str]:
-    @functools.lru_cache
-    def parse_message(num: int) -> Set[str]:
-        alternatives = rule_dict[num]
-        messages = set()
-        for alt in alternatives:
-            matching_rules = re.findall(r"(\d+)", alt)
-            if not matching_rules:
-                messages.add(re.findall(r'"(\w)"', alt)[0])
-            else:
-                rule_nums = [int(x) for x in matching_rules]
-                matching_messages = [
-                    parse_message(n)
-                    for n in rule_nums
-                ]
-                messages = messages.union({
-                    "".join(comb) for comb in product(*matching_messages)
-                })
-        return messages
-
-    return parse_message(0)
-
-
-def part_1(rule_dict: Dict[int, List[str]], messages: List[str]) -> int:
-    return len(parse_all_messages(rule_dict).intersection(set(messages)))
+def create_regex(rules_dict: Dict[str, List[str]]) -> str:
+    @functools.lru_cache()
+    def regex_rec(rule_n: str) -> str:
+        alternatives = rules_dict[rule_n]
+        if len(alternatives) == 1:
+            # Single letter
+            letter_match = re.findall(r'"(\w)"', alternatives[0])
+            if letter_match:
+                return letter_match[0]
+            # List of numbers
+            matching_rules = re.findall(r"(\d+)", alternatives[0])
+            return "".join(regex_rec(n) for n in matching_rules)
+        # Consider all the alternatives
+        alt_rules = [re.findall(r"(\d+)", alt) for alt in alternatives]
+        regexes = [
+            "".join(regex_rec(n) for n in rule)
+            for rule in alt_rules
+        ]
+        return "(" + "|".join(regexes) + ")"
+    return regex_rec("0")
 
 
-def part_2(rule_dict: Dict[int, List[str]], messages: List[str]) -> int:
+def part_1(rule_dict: Dict[str, List[str]], messages: List[str]) -> int:
+    regex = create_regex(rule_dict)
+    return sum(
+        re.fullmatch(regex, m) is not None
+        for m in messages
+    )
+
+
+def part_2(rule_dict: Dict[str, List[str]], messages: List[str]) -> int:
     updated_rules = rule_dict.copy()
-    updated_rules[8] = "42 | 8".split(" | ")
-    updated_rules[11] = "42 31 | 42 11 31".split(" | ")
-    return len(parse_all_messages(updated_rules).intersection(set(messages)))
+    updated_rules["8"] = [
+        " ".join(["42"] * i)
+        for i in range(1, 6)
+    ]
+    updated_rules["11"] = [
+        " ".join(["42"] * i + ["31"] * i)
+        for i in range(1, 6)
+    ]
+    regex = create_regex(updated_rules)
+
+    return sum(
+        re.fullmatch(regex, m) is not None
+        for m in messages
+    )
 
 
 if __name__ == '__main__':
     puzzle_input = read_puzzle_input("../puzzle_inputs/day_19.txt")
     print(f"Solution to part 1: {part_1(*puzzle_input)}")
-    # print(f"Solution to part 2: {part_2(*puzzle_input)}")
+    print(f"Solution to part 2: {part_2(*puzzle_input)}")
