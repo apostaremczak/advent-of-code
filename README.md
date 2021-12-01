@@ -1,6 +1,6 @@
 # Advent of Code
 
-My not-so-successful attempts at solving [Advent of Code](https://adventofcode.com/).
+My not-always-successful attempts at solving [Advent of Code](https://adventofcode.com/).
 
 | Year | Language  |
 |------|-----------|
