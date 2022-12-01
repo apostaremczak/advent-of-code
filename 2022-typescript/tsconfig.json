@@ -18,9 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "sourceMap": false,
+    "removeComments": true,
+    "outDir": "dist"
   },
   "include": [
-    "src"
+    "src",
+    "src/solutions/**/."
   ]
 }
