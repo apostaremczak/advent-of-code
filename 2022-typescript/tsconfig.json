@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2016",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -16,15 +16,19 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "isolatedModules": false,
+    "noEmit": false,
     "jsx": "react-jsx",
     "sourceMap": false,
     "removeComments": true,
     "outDir": "dist"
   },
   "include": [
-    "src",
-    "src/solutions/**/."
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "src/scripts/**/*"
   ]
 }
