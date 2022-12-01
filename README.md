@@ -9,3 +9,4 @@ My not-always-successful attempts at solving [Advent of Code](https://adventofco
 | 2019 | Scala     |
 | 2020 | Python    |
 | 2021 | Python    |
+| 2022 | TypeScript|
