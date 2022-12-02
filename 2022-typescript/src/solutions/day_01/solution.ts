@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readSplitByDoubleEmpty } from '../../utils/readFile'
+import { readSplitByDoubleEmpty } from '../../utils/readFiles'
 import { sum, sortDesc } from '../../utils/arrays'
 
 
@@ -10,4 +10,3 @@ console.log(Math.max(...elfSnacks));
 
 let topElfSnacks = sortDesc(elfSnacks).slice(0, 3)
 console.log(sum(topElfSnacks));
-

@@ -2,6 +2,8 @@
   "name": "2022-typescript",
   "version": "0.1.0",
   "private": true,
+        "type": "module",
+
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -45,6 +47,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.16",
+    "eslint": "^8.28.0",
     "ts-node": "^10.9.1"
   }
 }
