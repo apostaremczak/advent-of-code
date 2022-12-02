@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+const esr = require("esbuild-runner")
+esr.install({ type: "transform", debug: true })
+require("../src/util/cli")

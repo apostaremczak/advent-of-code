@@ -10,4 +10,3 @@ console.log(Math.max(...elfSnacks));
 
 let topElfSnacks = sortDesc(elfSnacks).slice(0, 3)
 console.log(sum(topElfSnacks));
-
