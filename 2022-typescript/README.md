@@ -1,48 +1,94 @@
-# Advent of Code 2022 🎄
+# 🎄 AdventOfCode-typescript-template 🎄
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It runs on React + TypeScript.
+This is a TypeScript boilerplate for Advent of Code.
 
-🤶 The actual solutions to the AoC puzzles can be found in `src/solutions`. 🤶
+## 👷‍♂️ Project structure
 
-## Available Scripts
+the project has the following structure:
 
-In the project directory, you can run:
+```
+src
+- days: contains the solutions for the puzzles
+- scripts: utility scripts for development lifecycle
+- types: types and interfaces
+- utils: utility scripts used for development and problem solving (i.e read an input file)
+```
 
-### `npm start`
+## 🚀 Getting started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+install all required dependencies with `npm i`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🎄 Adding a new puzzle
 
-### `npm test`
+when the new AoC puzzle is available run `npm run init-day {day}`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+replace `{day}` with the number of the advent day, i.e. `npm run init-day 2`.
 
-### `npm run build`
+This command will create a new directory in the `days` folder with the following content
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `Puzzle.ts`: the boilerplate class with the placeholder methods for solving both daily puzzles
+- `index.txt`: the input file where to add the puzzle input
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The structure of the boilerplate class is the following:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```typescript
+import Puzzle from '../../types/AbstractPuzzle';
 
-### `npm run eject`
+export default class ConcretePuzzle extends Puzzle {
+  public solveFirst(): string {
+    /*
+     *
+     * HERE GOES THE SOLUTION FOR THE FIRST PUZZLE
+     *
+     */
+    return 'day 1 solution 1';
+  }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  public getFirstExpectedResult(): string {
+    /*
+     *
+     * RETURN THE EXPECTED SOLUTION FOR THE FIRST TEST INPUT
+     * USEFULL FOR TEST RUNNING
+     *
+     */
+    return 'day 1 solution 1';
+  }
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  public solveSecond(): string {
+    /*
+     *
+     * HERE GOES THE SOLUTION FOR THE SECOND PUZZLE
+     *
+     */
+    return 'day 1 solution 2';
+  }
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  public getSecondExpectedResult(): string {
+    /*
+     *
+     * RETURN THE EXPECTED SOLUTION FOR THE SECOND TEST INPUT
+     * USEFULL FOR TEST RUNNING
+     *
+     */
+    return 'day 1 solution 2';
+  }
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+in each method of the class you can access the test input with `this.input`
 
-## Learn More
+## 🔧 Development
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+When your solution is ready, or when you want to start developing incrementally run `npm run dev {day}` where {day} is the day you are working on, i.e. `npm run dev 1` will run the puzzle class for day 1.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🧪 Testing
+
+You can ran test for all puzzles agains their expected output with `npm t` this will test all the solutions in the `days` folder
+
+## 🛫 Contributing
+
+Every contribution is welcome. Just fork this repo and open a MR with your changes, and don't forget to add your name to the contributors section of this README.
+
+## 👨👩 Contributors
+
+[Francesco Maida](https://edge33.github.io)
