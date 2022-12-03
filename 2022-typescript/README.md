@@ -1,6 +1,6 @@
 # 🎄 AdventOfCode-typescript-template 🎄
 
-This is a TypeScript boilerplate for Advent of Code.
+This is a TypeScript boilerplate for Advent of Code. Generated from a [template by edge33](https://github.com/edge33/AdventOfCode-typescript-template).
 
 ## 👷‍♂️ Project structure
 
@@ -84,11 +84,3 @@ When your solution is ready, or when you want to start developing incrementally 
 ## 🧪 Testing
 
 You can ran test for all puzzles agains their expected output with `npm t` this will test all the solutions in the `days` folder
-
-## 🛫 Contributing
-
-Every contribution is welcome. Just fork this repo and open a MR with your changes, and don't forget to add your name to the contributors section of this README.
-
-## 👨👩 Contributors
-
-[Francesco Maida](https://edge33.github.io)
