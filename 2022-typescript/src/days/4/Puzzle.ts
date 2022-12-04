@@ -33,9 +33,6 @@ export default class ConcretePuzzle extends Puzzle {
             .filter(([first, second]) => {
                 return first.overlaps(second);
             });
-
-        console.log(overlapping);
-
         return overlapping.length.toString();
     }
 
