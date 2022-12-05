@@ -1,30 +1,29 @@
 import Puzzle from '../../types/AbstractPuzzle';
 
 export default class ConcretePuzzle extends Puzzle {
-    private getElfSnacks(): number[] {
-        const elfs = this.input.split('\n\n');
-        const snacks = elfs
+    private getElfSnacks(input: string): number[] {
+        const elfs = input.split('\n\n');
+        return elfs
             .map(e => e.split('\n')
                 .reduce((sum, current) => sum + parseInt(current), 0));
-        return snacks;
     }
 
 
-    solveFirst(): string {
-        const result = Math.max(...this.getElfSnacks());
+    public solveFirst(input: string): string {
+        const result = Math.max(...this.getElfSnacks(input));
         return result.toString();
     }
 
-    public solveSecond(): string {
-        const topElfSnacks = this.sortDesc(this.getElfSnacks()).slice(0, 3);
+    public solveSecond(input: string): string {
+        const topElfSnacks = this.sortDesc(this.getElfSnacks(input)).slice(0, 3);
         return this.sum(topElfSnacks).toString();
     }
 
     public getFirstExpectedResult(): string {
-        return '70698';
+        return '24000';
     }
 
     public getSecondExpectedResult(): string {
-        return '206643';
+        return '45000';
     }
 }

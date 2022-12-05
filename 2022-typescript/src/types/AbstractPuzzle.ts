@@ -12,6 +12,14 @@ export default abstract class Puzzle implements PuzzleInterface {
         this.testInput = input;
     }
 
+    public getInput(): string {
+        return this.input;
+    }
+
+    public getTestInput(): string {
+        return this.testInput;
+    }
+
     protected sortDesc(nums: number[]): number[] {
         return nums.sort((one, two) => (one > two ? -1 : 1));
     }
@@ -20,11 +28,11 @@ export default abstract class Puzzle implements PuzzleInterface {
         return nums.reduce((sum, current) => sum + current, 0);
     }
 
-    public abstract solveFirst(): string;
+    public abstract solveFirst(input: string): string;
 
     public abstract getFirstExpectedResult(): string;
 
-    public abstract solveSecond(): string;
+    public abstract solveSecond(input: string): string;
 
     public abstract getSecondExpectedResult(): string;
 }

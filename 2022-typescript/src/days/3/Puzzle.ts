@@ -20,8 +20,8 @@ export default class ConcretePuzzle extends Puzzle {
         })
     );
 
-    public solveFirst(): string {
-        const rucksacks = this.input.split('\n');
+    public solveFirst(input: string): string {
+        const rucksacks = input.split('\n');
         const commons: string[][] = rucksacks.map(r => {
             const [first, second] = this.splitInHalf(r);
             return Array.from(this.intersection(first.split(''), second.split('')));
@@ -46,8 +46,8 @@ export default class ConcretePuzzle extends Puzzle {
             .map(begin => array.slice(begin, begin + chunkSize));
     }
 
-    public solveSecond(): string {
-        const rucksacks = this.input.split('\n');
+    public solveSecond(input: string): string {
+        const rucksacks = input.split('\n');
         const elfGroups: string[][] = this.sliceIntoChunks(rucksacks, 3);
         const badges: string[] = elfGroups.map(group => {
             const [first, second, third] = group;

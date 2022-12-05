@@ -1,7 +1,7 @@
 import Puzzle from '../../types/AbstractPuzzle';
 
 export default class ConcretePuzzle extends Puzzle {
-  public solveFirst(): string {
+  public solveFirst(input: string): string {
     // WRITE SOLUTION FOR TEST 1
     return 'day 1 solution 1';
   }
@@ -11,7 +11,7 @@ export default class ConcretePuzzle extends Puzzle {
     return 'day 1 solution 1';
   }
 
-  public solveSecond(): string {
+  public solveSecond(input: string): string {
     // WRITE SOLUTION FOR TEST 2
     return 'day 1 solution 2';
   }

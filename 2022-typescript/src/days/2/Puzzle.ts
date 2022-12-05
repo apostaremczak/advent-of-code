@@ -11,11 +11,11 @@ export default class ConcretePuzzle extends Puzzle {
     private TheirScissors = 'C';
 
 
-    public solveFirst(): string {
+    public solveFirst(input: string): string {
         const MyRock = 'X';
         const MyPaper = 'Y';
 
-        const games: string[] = this.input.split('\n');
+        const games: string[] = input.split('\n');
         const results: number[] = games.map(game => {
             const choices = game.split(' ');
             const theirs = choices[0];
@@ -59,11 +59,11 @@ export default class ConcretePuzzle extends Puzzle {
         return '15';
     }
 
-    public solveSecond(): string {
+    public solveSecond(input: string): string {
         const Win = 'Z';
         const Draw = 'Y';
 
-        const games: string[] = this.input.split('\n');
+        const games: string[] = input.split('\n');
         const results: number[] = games.map(game => {
             const choices = game.split(' ');
             const theirs = choices[0];

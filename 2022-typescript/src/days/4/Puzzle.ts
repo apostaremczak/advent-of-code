@@ -2,16 +2,16 @@ import Puzzle from '../../types/AbstractPuzzle';
 import { CleaningRange, createCleaningRange } from './CleaningRange';
 
 export default class ConcretePuzzle extends Puzzle {
-    private getCleaningPairs(): CleaningRange[][] {
-        return this.input.split('\n')
+    private getCleaningPairs(input: string): CleaningRange[][] {
+        return input.split('\n')
             .map(p => p.split(','))
             .map(([first, second]) => {
                 return [createCleaningRange(first), createCleaningRange(second)];
             });
     }
 
-    public solveFirst(): string {
-        const cleaningPairs: CleaningRange[][] = this.getCleaningPairs();
+    public solveFirst(input: string): string {
+        const cleaningPairs: CleaningRange[][] = this.getCleaningPairs(input);
 
         const fullyOverlapping = cleaningPairs
             .filter(([first, second]) => {
@@ -23,11 +23,11 @@ export default class ConcretePuzzle extends Puzzle {
 
     public getFirstExpectedResult(): string {
         // RETURN EXPECTED SOLUTION FOR TEST 1;
-        return '651';
+        return '2';
     }
 
-    public solveSecond(): string {
-        const cleaningPairs: CleaningRange[][] = this.getCleaningPairs();
+    public solveSecond(input: string): string {
+        const cleaningPairs: CleaningRange[][] = this.getCleaningPairs(input);
         
         const overlapping = cleaningPairs
             .filter(([first, second]) => {
@@ -38,6 +38,6 @@ export default class ConcretePuzzle extends Puzzle {
 
     public getSecondExpectedResult(): string {
         // RETURN EXPECTED SOLUTION FOR TEST 2;
-        return '956';
+        return '4';
     }
 }

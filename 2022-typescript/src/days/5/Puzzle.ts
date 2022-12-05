@@ -21,8 +21,8 @@ export default class ConcretePuzzle extends Puzzle {
         return crates;
     }
 
-    public solveFirst(): string {
-        const [arrangement, procedures] = this.input.split('\n\n');
+    public solveFirst(input: string): string {
+        const [arrangement, procedures] = input.split('\n\n');
         const crates = this.parseCrateArrangement(arrangement);
         const instructionRegex = /move (\d+) from (\d+) to (\d+)/g;
 
@@ -47,11 +47,11 @@ export default class ConcretePuzzle extends Puzzle {
 
     public getFirstExpectedResult(): string {
         // RETURN EXPECTED SOLUTION FOR TEST 1;
-        return 'TDCHVHJTG';
+        return 'CMZ';
     }
 
-    public solveSecond(): string {
-        const [arrangement, procedures] = this.input.split('\n\n');
+    public solveSecond(input: string): string {
+        const [arrangement, procedures] = input.split('\n\n');
         const crates = this.parseCrateArrangement(arrangement);
         const instructionRegex = /move (\d+) from (\d+) to (\d+)/g;
 
@@ -73,6 +73,6 @@ export default class ConcretePuzzle extends Puzzle {
 
     public getSecondExpectedResult(): string {
         // RETURN EXPECTED SOLUTION FOR TEST 2;
-        return 'NGCMPJLHV';
+        return 'MCD';
     }
 }
