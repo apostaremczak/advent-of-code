@@ -5,8 +5,10 @@ class PuzzleFactory {
   public async getPuzzle(puzzleName: string) {
     const puzzlePath = `src/days/${puzzleName}`;
     let input = '';
+    let testInput = '';
     try {
       input = await readFile(`${puzzlePath}/input.txt`);
+      testInput = await readFile(`${puzzlePath}/test_input.txt`);
     } catch (error) {
       console.error(error);
       process.exit(1);
@@ -19,6 +21,7 @@ class PuzzleFactory {
     const { default: puzzleClass } = puzzleModule;
     const puzzle = new puzzleClass();
     await puzzle.setInput(input);
+    await puzzle.setTestInput(testInput);
     return puzzle;
   }
 }
