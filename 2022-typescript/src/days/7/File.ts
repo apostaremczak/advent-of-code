@@ -1,14 +1,10 @@
-import { SystemObject } from './SystemObject';
-
-export default class File implements SystemObject {
-    constructor(readonly name: string, readonly size: number) {
-    }
-
-    public getSize(): number {
-        return this.size;
-    }
-
-    public isDirectory(): boolean {
-        return false;
+export default class File {
+    public absolutePath: string;
+    constructor(readonly dir: string, readonly fileName: string, readonly size: number) {
+        if (dir === '/') {
+            this.absolutePath = `/${fileName}`;
+        } else {
+            this.absolutePath = `${dir}/${fileName}`;
+        }
     }
 }
