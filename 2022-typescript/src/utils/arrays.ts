@@ -9,3 +9,7 @@ export function sum(nums: number[]): number {
 export function deduplicate<T>(arr: T[]): T[] {
     return Array.from(new Set(arr));
 }
+
+export function zip<A, B>(a: A[], b: B[]): [A, B][] {
+    return a.map((k, i) => [k, b[i]]);
+}
