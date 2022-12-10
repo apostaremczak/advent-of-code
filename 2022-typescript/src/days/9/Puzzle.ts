@@ -9,29 +9,18 @@ export default class ConcretePuzzle extends Puzzle {
         ['R', [0, 1]]
     ]);
 
-    private areTouching(first: RopeEnd, second: RopeEnd): boolean {
-        return Math.abs(first.x - second.x) <= 1 && Math.abs(first.y - second.y) <= 1;
-    }
-
     public solveFirst(input: string): string {
-        const head = new RopeEnd();
-        const tail = new RopeEnd();
-        const visitedByTail: string[] = [];
+        const tail = new RopeKnot();
+        const head = new RopeKnot(tail);
 
         input.split('\n').map(instruction => {
             const [direction, amountStr] = instruction.split(' ');
             Array.from(Array(parseInt(amountStr))).forEach(_ => {
                 head.move(this.Moves.get(direction));
-
-                if (!this.areTouching(head, tail)) {
-                    tail.move([Math.sign(head.x - tail.x), Math.sign(head.y - tail.y)]);
-                }
-
-                visitedByTail.push([tail.x, tail.y].join(','));
             });
         });
 
-        return deduplicate(visitedByTail).length.toString();
+        return tail.getVisitedSpotsCount().toString();
     }
 
     public getFirstExpectedResult(): string {
@@ -40,30 +29,71 @@ export default class ConcretePuzzle extends Puzzle {
     }
 
     public solveSecond(input: string): string {
-        // WRITE SOLUTION FOR TEST 2
-        return 'day 1 solution 2';
+        const tail = new RopeKnot();
+        const eighth = new RopeKnot(tail);
+        const seventh = new RopeKnot(eighth);
+        const sixth = new RopeKnot(seventh);
+        const fifth = new RopeKnot(sixth);
+        const fourth = new RopeKnot(fifth);
+        const third = new RopeKnot(fourth);
+        const second = new RopeKnot(third);
+        const first = new RopeKnot(second);
+        const head = new RopeKnot(first);
+
+        input.split('\n').map(instruction => {
+            const [direction, amountStr] = instruction.split(' ');
+            Array.from(Array(parseInt(amountStr))).forEach(_ => {
+                head.move(this.Moves.get(direction));
+            });
+        });
+
+        return tail.getVisitedSpotsCount().toString();
     }
 
     public getSecondExpectedResult(): string {
         // RETURN EXPECTED SOLUTION FOR TEST 2;
-        return 'day 1 solution 2';
+        return '1';
     }
 
 
 }
 
-class RopeEnd {
-    public x: number;
-    public y: number;
+class RopeKnot {
+    private x: number;
+    private y: number;
+    private visitedSpots: string[];
 
-    constructor() {
+    constructor(readonly next?: RopeKnot) {
         this.x = 0;
         this.y = 0;
+        this.visitedSpots = [];
+        this.markAsVisited();
+    }
+
+    private markAsVisited(): void {
+        this.visitedSpots.push([this.x, this.y].join(','));
     }
 
     public move(direction: [number, number]): void {
         const [x, y] = direction;
         this.x += x;
         this.y += y;
+
+        if (this.next !== undefined && !this.isTouching(this.next)) {
+            this.next.move([
+                Math.sign(this.x - this.next.x),
+                Math.sign(this.y - this.next.y)
+            ]);
+        }
+
+        this.markAsVisited();
+    }
+
+    private isTouching(other: RopeKnot): boolean {
+        return Math.abs(this.x - other.x) <= 1 && Math.abs(this.y - other.y) <= 1;
+    }
+
+    public getVisitedSpotsCount(): number {
+        return deduplicate(this.visitedSpots).length;
     }
 }
