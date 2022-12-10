@@ -13,3 +13,7 @@ export function deduplicate<T>(arr: T[]): T[] {
 export function zip<A, B>(a: A[], b: B[]): [A, B][] {
     return a.map((k, i) => [k, b[i]]);
 }
+
+export function rangeInclusive(start: number, end: number): number[] {
+    return Array(end - start + 1).fill(0).map((_, idx) => start + idx);
+}
