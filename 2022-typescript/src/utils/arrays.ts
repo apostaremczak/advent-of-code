@@ -15,7 +15,12 @@ export function zip<A, B>(a: A[], b: B[]): [A, B][] {
 }
 
 export function rangeInclusive(start: number, end: number): number[] {
-    return Array(end - start + 1).fill(0).map((_, idx) => start + idx);
+    if (start <= end) {
+        return Array(end - start + 1).fill(0).map((_, idx) => start + idx);
+
+    }
+    // Reversed array
+    return Array(start - end + 1).fill(0).map((_, idx) => end + idx);
 }
 
 export function toSlidingWindows<T>(inputArray: T[], windowSize: number): T[][] {
