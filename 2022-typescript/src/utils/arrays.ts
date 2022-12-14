@@ -17,3 +17,10 @@ export function zip<A, B>(a: A[], b: B[]): [A, B][] {
 export function rangeInclusive(start: number, end: number): number[] {
     return Array(end - start + 1).fill(0).map((_, idx) => start + idx);
 }
+
+export function toSlidingWindows<T>(inputArray: T[], windowSize: number): T[][] {
+    return Array.from(
+        { length: inputArray.length - (windowSize - 1) }, // get the appropriate length
+        (_, index) => inputArray.slice(index, index + windowSize) // create the windows
+    );
+}

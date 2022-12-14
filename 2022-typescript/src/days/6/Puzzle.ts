@@ -1,20 +1,14 @@
 import Puzzle from '../../types/AbstractPuzzle';
+import { toSlidingWindows } from '../../utils/arrays';
 
 export default class ConcretePuzzle extends Puzzle {
     // Find the index of the first four characters that are all different
     private detectStartOfPacket(buffer: string, uniqueCount = 4): number {
-        const windows = this.toSlidingWindows<string>(Array.from(buffer), uniqueCount);
+        const windows = toSlidingWindows<string>(Array.from(buffer), uniqueCount);
         const firstUnique = windows.findIndex(substring => {
             return new Set(substring).size == uniqueCount;
         });
         return firstUnique + uniqueCount;
-    }
-
-    private toSlidingWindows<T>(inputArray: T[], windowSize: number): T[][] {
-        return Array.from(
-            { length: inputArray.length - (windowSize - 1) }, // get the appropriate length
-            (_, index) => inputArray.slice(index, index + windowSize) // create the windows
-        );
     }
 
     public solveFirst(input: string): string {
