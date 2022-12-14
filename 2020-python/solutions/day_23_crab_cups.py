@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from tqdm import tqdm
 from typing import List
 
 
@@ -69,7 +69,7 @@ class CrabCupsGameState:
     def __repr__(self):
         return f"CrabCupsGameState(current_index={self.current_index}, cups={self.cups})"
 
-    def get_cups_after_1(self):
+    def get_all_cups_after_1(self):
         one_idx = self.cups.index(1)
         return self.get_slice(one_idx + 1, one_idx - 1)
 
@@ -82,11 +82,16 @@ def part_1(entries: List[int]) -> str:
     game_state = CrabCupsGameState(current_index=0, cups=entries)
     for _ in range(100):
         game_state = game_state.simulate_move()
-    return ''.join([str(x) for x in game_state.get_cups_after_1()])
+    return ''.join([str(x) for x in game_state.get_all_cups_after_1()])
 
 
-def part_2(entries: List[int]) -> str:
-    pass
+def part_2(entries: List[int]) -> int:
+    total_entry = entries + [i for i in range(max(entries) + 1, 10000001)]
+    game_state = CrabCupsGameState(current_index=0, cups=total_entry)
+    for _ in tqdm(range(10000000)):
+        game_state = game_state.simulate_move()
+    after_1 = game_state.get_all_cups_after_1()[:2]
+    return after_1[0] * after_1[1]
 
 
 if __name__ == '__main__':

@@ -41,7 +41,7 @@ def test_simulate_multiple_moves():
 
 def test_get_cups_after_1():
     game_state = CrabCupsGameState(current_index=1, cups=[5, 8, 3, 7, 4, 1, 9, 2, 6])
-    assert game_state.get_cups_after_1() == [9, 2, 6, 5, 8, 3, 7, 4]
+    assert game_state.get_all_cups_after_1() == [9, 2, 6, 5, 8, 3, 7, 4]
 
 
 def test_part_1():
