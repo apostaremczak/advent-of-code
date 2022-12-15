@@ -1,5 +1,5 @@
 import Puzzle from '../../types/AbstractPuzzle';
-import { numsToCoords } from '../../utils/mazes';
+import { numsToStrCoords } from '../../utils/mazes';
 
 export default class ConcretePuzzle extends Puzzle {
     public solveFirst(input: string): string {
@@ -54,7 +54,7 @@ class HeightNode {
     }
 
     public getCoords(): string {
-        return numsToCoords(this.x, this.y);
+        return numsToStrCoords(this.x, this.y);
     }
 
     public isMovePossible(to: HeightNode): boolean {
@@ -97,7 +97,7 @@ class Heightmap {
         const nodes = new Map<string, HeightNode>();
         nodesArray.forEach((row, x) => {
             row.forEach((node, y) => {
-                const coord = numsToCoords(x, y);
+                const coord = numsToStrCoords(x, y);
                 if (x >= 1) {
                     node.addNeighbor(nodesArray[x - 1][y]);
                 }
