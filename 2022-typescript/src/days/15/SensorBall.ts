@@ -1,4 +1,5 @@
 import { Coord, coordToStr, getManhattanDistance } from '../../utils/mazes';
+import { rangeInclusive, sum } from '../../utils/arrays';
 
 export default class SensorBall {
     public readonly radius: number;
@@ -11,19 +12,21 @@ export default class SensorBall {
         return getManhattanDistance(this.sensor, point) <= this.radius;
     }
 
-    public getUnbeacablePointsAt(y: number, xFrom: number, xTo: number): string[] {
+    public getCoveredRangeAt(y: number): { start: number, stop: number } | null {
+        // Only consider the balls that can touch the y-line
         if (this.sensor.y + this.radius < y || this.sensor.y - this.radius > y) {
-            return [];
+            return null;
         }
-        const unbeacable: string[] = [];
-        for (let x = xFrom; x <= xTo; x++) {
-            const point: Coord = { x: x, y: y };
-            if (this.isWithinRadius(point)) {
-                unbeacable.push(coordToStr(point));
-            }
-        }
-        return unbeacable;
-    };
+        // y-line crosses the ball
+        // Calculate the distance from the center of the ball to the y line
+        const a = Math.abs(this.sensor.y - y);
+        // What is the remaining radius length at the disposal on each side (with regard to the center)?
+        const b = this.radius - a;
+        return {
+            start: this.sensor.x - b,
+            stop: this.sensor.x + b
+        };
+    }
 
     public getOutsideBorder(): Coord[] {
         const top = {

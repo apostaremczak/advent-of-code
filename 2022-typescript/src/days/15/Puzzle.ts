@@ -1,23 +1,36 @@
 import Puzzle from '../../types/AbstractPuzzle';
-import { Coord, coordToStr } from '../../utils/mazes';
-import { deduplicate } from '../../utils/arrays';
+import { Coord } from '../../utils/mazes';
+import { deduplicate, sum } from '../../utils/arrays';
 import SensorBall from './SensorBall';
 
 const instructionRegex = /Sensor at x=(\d+|-\d+), y=(\d+|-\d+): closest beacon is at x=(\d+|-\d+), y=(\d+|-\d+)/g;
 
 export default class ConcretePuzzle extends Puzzle {
     public solveFirst(input: string): string {
-        const sensorBalls: SensorBall[] = this.parseSensorBalls(input);
-        const rowY = 10; // TEST
-        // const rowY = 2000000; // Actual solution
+        const inputLines = input.split('\n');
+        const rowY = Number(inputLines.pop().split(';')[0]);
+        const sensorBalls: SensorBall[] = this.parseSensorBalls(inputLines);
 
-        const beacons: string[] = sensorBalls.map(ball => coordToStr(ball.closestBeacon));
-        const unbeacableCoords: string[] = sensorBalls
-            .flatMap(ball => ball.getUnbeacablePointsAt(rowY, ball.sensor.x - ball.radius, ball.sensor.x + ball.radius))
-            .filter(p => !beacons.includes(p));
+        const beaconsAtRowY: number[] = deduplicate(
+            sensorBalls
+                .filter(b => b.closestBeacon.y === rowY)
+                .map(ball => ball.closestBeacon.x)
+        );
 
-        const solution = deduplicate(unbeacableCoords);
-        return solution.length.toString();
+        const unbeacableRanges = sensorBalls
+            .map(ball => ball.getCoveredRangeAt(rowY))
+            .filter(r => r !== null);
+
+        // To be fully pedantic, we should have considered an algebraic sum of all the intervals found above
+        // (For this, see the unused method getIntervalUnionLength)
+        // However, in this example, the resulting interval is fully continuous and doesn't have any holes
+        // Thus finding the total length requires us to simply find the outermost borders
+        const xStart = Math.min(...unbeacableRanges.map(r => r.start));
+        const xEnd = Math.max(...unbeacableRanges.map(r => r.stop));
+        const beaconsInRange = beaconsAtRowY.filter(b => b >= xStart && b <= xEnd);
+
+        // Add plus one because for each interval of length n there are n + 1 possible beacon positions
+        return (Math.abs(xEnd - xStart) + 1 - beaconsInRange.length).toString();
     }
 
     public getFirstExpectedResult(): string {
@@ -26,10 +39,10 @@ export default class ConcretePuzzle extends Puzzle {
     }
 
     public solveSecond(input: string): string {
-        const sensorBalls: SensorBall[] = this.parseSensorBalls(input);
+        const inputLines = input.split('\n');
         const minCoord = 0;
-        const maxCoord = 20; // TEST
-        // const maxCoord = 4000000; // Actual solution
+        const maxCoord = Number(inputLines.pop().split(';')[1]);
+        const sensorBalls: SensorBall[] = this.parseSensorBalls(inputLines);
 
         for (const [index, ball] of sensorBalls.entries()) {
             const border = ball.getOutsideBorder();
@@ -49,8 +62,8 @@ export default class ConcretePuzzle extends Puzzle {
         return '56000011';
     }
 
-    private parseSensorBalls(input: string): SensorBall[] {
-        return input.split('\n').map(line => {
+    private parseSensorBalls(inputLines: string[]): SensorBall[] {
+        return inputLines.map(line => {
             const matches = Array.from(line.matchAll(instructionRegex))[0];
             const sensor: Coord = {
                 x: Number(matches[1]),
@@ -64,5 +77,46 @@ export default class ConcretePuzzle extends Puzzle {
             return new SensorBall(sensor, beacon);
         });
     }
-}
 
+    private getIntervalUnionLength(intervals: { start: number, end: number }[]): number {
+        const sortedIntervals = intervals
+            .sort((a, b) => {
+            if (a.start < b.start) {
+                return -1;
+            }
+            if (a.start === b.start) {
+                return 0;
+            }
+            return 1;
+        });
+
+        const intervalUnion = [];
+        let currentStart = sortedIntervals[0].start;
+        let currentStop = sortedIntervals[0].end;
+
+        for (const { start: start, end: stop } of sortedIntervals.slice(1, sortedIntervals.length)) {
+            // Check if the current interval overlaps with the current
+            if (start <= currentStop) {
+                if (stop > currentStop) {
+                    currentStop = stop;
+                }
+            } else {
+                // No overlapping - start a new interval and save the previous one
+                intervalUnion.push({
+                    start: currentStart,
+                    end: currentStop
+                });
+                currentStart = start;
+                currentStop = stop;
+            }
+
+        }
+        intervalUnion.push({
+            start: currentStart,
+            end: currentStop
+        });
+
+        return sum(intervalUnion.map(i => Math.abs(i.end - i.start) + 1));
+    }
+
+}
