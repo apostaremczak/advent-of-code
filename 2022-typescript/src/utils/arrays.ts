@@ -29,3 +29,23 @@ export function toSlidingWindows<T>(inputArray: T[], windowSize: number): T[][] 
         (_, index) => inputArray.slice(index, index + windowSize) // create the windows
     );
 }
+
+// https://stackoverflow.com/questions/9960908/permutations-in-javascript
+export function permute<T>(inputArray: T[]): T[][] {
+    const result: T[][] = [];
+
+    const permute = (arr: T[], m: T[] = []) => {
+        if (arr.length === 0) {
+            result.push(m);
+        } else {
+            for (let i = 0; i < arr.length; i++) {
+                const curr = arr.slice();
+                const next = curr.splice(i, 1);
+                permute(curr.slice(), m.concat(next));
+            }
+        }
+    };
+
+    permute(inputArray);
+    return result;
+}
