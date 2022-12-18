@@ -15,3 +15,8 @@ export function getManhattanDistance(a: Coord, b: Coord): number {
 export function equal(a: Coord, b: Coord): boolean {
     return a.x === b.x && a.y === b.y;
 }
+
+export function strToCoord(s: string): Coord {
+    const [x, y] = s.split(',');
+    return { x: Number(x), y: Number(y) };
+}

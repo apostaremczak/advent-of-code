@@ -6,3 +6,8 @@ export function findAllIndices(str: string, substring: string): number[] {
     }
     return locations;
 }
+
+
+export function findAllGroups(str: string, regex: RegExp): string[] {
+    return Array.from(str.matchAll(regex))[0];
+}
