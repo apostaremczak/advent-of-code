@@ -26,33 +26,14 @@ export default class ConcretePuzzle extends Puzzle {
         const maxX = Math.max(...allCoords.map(c => c.x));
         const maxY = Math.max(...allCoords.map(c => c.y));
         const maxZ = Math.max(...allCoords.map(c => c.z));
-        const spaceOutside = this.findSpaceOutsideDroplet(coveredGrid, maxX, maxY, maxZ);
+        const spaceOutside = this.findSpaceOutsideDroplet(coveredGrid, maxX + 1, maxY + 1, maxZ + 1);
 
-        const totalSpace: Set<string> = new Set<string>(
-            rangeInclusive(0, maxX)
-                .flatMap(x =>
-                    rangeInclusive(0, maxY)
-                        .flatMap(y =>
-                            rangeInclusive(0, maxZ)
-                                .map(z => numsToStrCoords(x, y, z))))
-        );
-
-        const coveredAndOutside = new Set([...coveredGrid, ...spaceOutside]);
-        const trapped = new Set([...totalSpace].filter(a => !coveredAndOutside.has(a)));
-
-        const exposedSurface = sum(Array.from(coveredGrid.values())
+        const outsideSurface = sum(Array.from(coveredGrid.values())
             .map(coordStr => {
-                const connectedSides = this.getConnectedSides(strToCoord(coordStr), coveredGrid);
-                return 6 - connectedSides.length;
+                return this.getConnectedSides(strToCoord(coordStr), spaceOutside).length;
             }));
 
-        const trappedSurface = sum(Array.from(trapped.values())
-            .map(coordStr => {
-                const connectedSides = this.getConnectedSides(strToCoord(coordStr), coveredGrid);
-                return connectedSides.length;
-            }));
-
-        return (exposedSurface - trappedSurface).toString();
+        return outsideSurface.toString();
     }
 
     public getSecondExpectedResult(): string {
@@ -69,7 +50,8 @@ export default class ConcretePuzzle extends Puzzle {
 
         const cubesOutside = new Set<string>();
         const cubesVisited = new Set<string>();
-        let queue = ['0,0,0'];
+        // Start below all the other points to ensure we don't get trapped close to some 0-axis
+        let queue = ['-1,-1,-1'];
 
         while (queue.length > 0) {
             const cube = queue.pop();
@@ -85,7 +67,7 @@ export default class ConcretePuzzle extends Puzzle {
                         z: coord.z + zOffset
                     };
                     if (neighCoord.x > maxX || neighCoord.y > maxY || neighCoord.z > maxZ
-                        || neighCoord.x < 0 || neighCoord.y < 0 || neighCoord.z < 0) {
+                        || neighCoord.x < -1 || neighCoord.y < -1 || neighCoord.z < -1) {
                         return null;
                     }
                     return coordToStr(neighCoord);
