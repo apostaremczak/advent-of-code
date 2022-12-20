@@ -1,48 +1,61 @@
-import { toSlidingWindows } from '../../utils/arrays';
 import Coordinate from './Coordinate';
 
 export default class File {
     private values: number[];
-    private coords: Map<number, Coordinate>;
+    private head: Coordinate;
+    private tail: Coordinate;
+    private zeroNode: Coordinate;
 
     constructor(input: string) {
         this.values = input.split('\n').map(n => Number(n));
-        this.coords = this.inputToDoublyLinked(this.values);
-    }
+        const firstNode = new Coordinate(this.values[0]);
 
-    // Create a doubly linked array
-    private inputToDoublyLinked(values: number[]): Map<number, Coordinate> {
-        const m = new Map<number, Coordinate>();
-
-        // Create the node for the first entry
-        const firstNode = new Coordinate(values[0]);
-        m.set(values[0], firstNode);
-
-        toSlidingWindows(values, 2).forEach(([previousValue, currentValue], _) => {
+        let prevNode = firstNode;
+        for (const currentValue of this.values.slice(1)) {
             const currentNode = new Coordinate(currentValue);
-            const prevNode = m.get(previousValue);
             currentNode.setPrevious(prevNode);
             prevNode.setNext(currentNode);
 
-            m.set(currentValue, currentNode);
-        });
+            if (currentValue === 0) {
+                this.zeroNode = currentNode;
+            }
 
-        // Link the first and the last nodes to create a circular array
-        const lastNode = m.get(values.slice(-1)[0]);
+            prevNode = currentNode;
+        }
+
+        const lastNode = prevNode;
         firstNode.setPrevious(lastNode);
         lastNode.setNext(firstNode);
 
-        return m;
+        this.head = firstNode;
+        this.tail = lastNode;
     }
 
-    public getGroveCoordinates(
-        start = 0,
-        at = [1000, 2000, 3000]
-    ): number[] {
+    private getNodesInOrder(start = this.head): Coordinate[] {
+        const order = [start];
+        let current = start;
+        let next = current.next;
+
+        while (next !== start) {
+            current = next;
+            order.push(next);
+            next = current.next;
+        }
+
+        return order;
+    }
+
+    public print(start = this.head): void {
+        const values = this.getNodesInOrder(start).map(c => c.value);
+        console.log(values.join(', '));
+    }
+
+    public getGroveCoordinates(at = [1000, 2000, 3000]): number[] {
         const groveCoords: number[] = [];
+        const start = this.zeroNode;
 
         let i = 1;
-        let currentNode = this.coords.get(start).next;
+        let currentNode = start.next;
         while (groveCoords.length < at.length) {
             if (at.includes(i)) {
                 groveCoords.push(currentNode.value);
@@ -54,33 +67,31 @@ export default class File {
         return groveCoords;
     }
 
-    private shiftRight(startPosition: number): void {
-        const middleNode = this.coords.get(startPosition);
-        const leftNode = middleNode.prev;
-        const rightNode = middleNode.next;
+    private shiftRight(coordinate: Coordinate): void {
+        const leftNode = coordinate.prev;
+        const rightNode = coordinate.next;
         const rightRightNode = rightNode.next;
 
         leftNode.setNext(rightNode);
         rightNode.setPrevious(leftNode);
 
-        middleNode.setPrevious(rightNode);
-        rightNode.setNext(middleNode);
+        coordinate.setPrevious(rightNode);
+        rightNode.setNext(coordinate);
 
-        middleNode.setNext(rightRightNode);
-        rightRightNode.setPrevious(middleNode);
+        coordinate.setNext(rightRightNode);
+        rightRightNode.setPrevious(coordinate);
     }
 
-    private shiftLeft(startPosition: number): void {
-        const middleNode = this.coords.get(startPosition);
-        const leftNode = middleNode.prev;
+    private shiftLeft(coordinate: Coordinate): void {
+        const leftNode = coordinate.prev;
         const leftLeftNode = leftNode.prev;
-        const rightNode = middleNode.next;
+        const rightNode = coordinate.next;
 
-        leftLeftNode.setNext(middleNode);
-        middleNode.setPrevious(leftLeftNode);
+        leftLeftNode.setNext(coordinate);
+        coordinate.setPrevious(leftLeftNode);
 
-        middleNode.setNext(leftNode);
-        leftNode.setPrevious(middleNode);
+        coordinate.setNext(leftNode);
+        leftNode.setPrevious(coordinate);
 
         leftNode.setNext(rightNode);
         rightNode.setPrevious(leftNode);
@@ -88,28 +99,14 @@ export default class File {
 
     public mix(): void {
         // Iterate over all the inputs and move them accordingly
-        for (const currentValue of this.values) {
-            if (currentValue > 0) {
-                // Move to the right
-                Array(currentValue).fill(0).forEach(_ => this.shiftRight(currentValue));
-            } else if (currentValue < 0) {
-                // Move to the left
-                Array(Math.abs(currentValue)).fill(0).forEach(_ => this.shiftLeft(currentValue));
+        const originalOrder = this.getNodesInOrder();
+
+        for (const currentNode of originalOrder) {
+            if (currentNode.value > 0) {
+                Array(currentNode.value).fill(0).forEach(_ => this.shiftRight(currentNode));
+            } else if (currentNode.value < 0) {
+                Array(Math.abs(currentNode.value)).fill(0).forEach(_ => this.shiftLeft(currentNode));
             }
         }
-    }
-
-    public print(start: number = this.values[0]): void {
-        const values = [start];
-        let current = start;
-        let next = this.coords.get(current).next.value;
-
-        while (next !== start) {
-            current = next;
-            values.push(next);
-            next = this.coords.get(current).next.value;
-        }
-
-        console.log(values.join(', '));
     }
 }
