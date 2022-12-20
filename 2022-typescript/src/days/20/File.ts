@@ -1,13 +1,14 @@
 import Coordinate from './Coordinate';
 
 export default class File {
-    private values: number[];
+    private readonly values: number[];
     private head: Coordinate;
-    private tail: Coordinate;
-    private zeroNode: Coordinate;
+    private readonly zeroNode: Coordinate;
+    private readonly originalOrder: Coordinate[];
+    private readonly size: number;
 
-    constructor(input: string) {
-        this.values = input.split('\n').map(n => Number(n));
+    constructor(input: string, readonly decryptionKey = 1) {
+        this.values = input.split('\n').map(n => (Number(n) * decryptionKey));
         const firstNode = new Coordinate(this.values[0]);
 
         let prevNode = firstNode;
@@ -28,7 +29,8 @@ export default class File {
         lastNode.setNext(firstNode);
 
         this.head = firstNode;
-        this.tail = lastNode;
+        this.originalOrder = this.getNodesInOrder();
+        this.size = this.originalOrder.length - 1;
     }
 
     private getNodesInOrder(start = this.head): Coordinate[] {
@@ -99,13 +101,15 @@ export default class File {
 
     public mix(): void {
         // Iterate over all the inputs and move them accordingly
-        const originalOrder = this.getNodesInOrder();
-
-        for (const currentNode of originalOrder) {
+        for (const currentNode of this.originalOrder) {
             if (currentNode.value > 0) {
-                Array(currentNode.value).fill(0).forEach(_ => this.shiftRight(currentNode));
+                for (let i = 1; i <= currentNode.value % this.size; i++) {
+                    this.shiftRight(currentNode);
+                }
             } else if (currentNode.value < 0) {
-                Array(Math.abs(currentNode.value)).fill(0).forEach(_ => this.shiftLeft(currentNode));
+                for (let i = 1; i <= Math.abs(currentNode.value) % this.size; i++) {
+                    this.shiftLeft(currentNode);
+                }
             }
         }
     }

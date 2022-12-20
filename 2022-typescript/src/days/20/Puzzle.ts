@@ -15,14 +15,18 @@ export default class ConcretePuzzle extends Puzzle {
     }
 
     public solveSecond(input: string): string {
-        // WRITE SOLUTION FOR TEST 2
-        return 'day 1 solution 2';
+        const file = new File(input, 811589153);
+        // Mix it ten times
+        Array(10)
+            .fill(0)
+            .forEach(_ =>
+                file.mix()
+            );
+        return sum(file.getGroveCoordinates()).toString();
     }
 
     public getSecondExpectedResult(): string {
         // RETURN EXPECTED SOLUTION FOR TEST 2;
-        return 'day 1 solution 2';
+        return '1623178306';
     }
 }
-
-
