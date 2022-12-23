@@ -78,11 +78,19 @@ export class RockFigure {
 
 export class RockFigureFactory {
     private rockIdx = 0;
-    private figureCount = Figures.length;
+    public figureCount = Figures.length;
 
     public getNextRock(x: number, y: number): RockFigure {
         const rock = new RockFigure(x, y, this.rockIdx);
         this.rockIdx = (this.rockIdx + 1) % this.figureCount;
         return rock;
+    }
+
+    public getRock(x: number, y: number, index: number): RockFigure {
+        return new RockFigure(x, y, index);
+    }
+
+    public seed(index: number): void {
+        this.rockIdx = index;
     }
 }
