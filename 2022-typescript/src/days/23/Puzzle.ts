@@ -1,9 +1,16 @@
 import Puzzle from '../../types/AbstractPuzzle';
+import { numsToStrCoords, strToCoord } from '../../utils/mazes';
+import ElfMaze from './ElfMaze';
 
 export default class ConcretePuzzle extends Puzzle {
   public solveFirst(input: string): string {
-    // WRITE SOLUTION FOR TEST 1
-    return 'day 1 solution 1';
+    const elfMaze = new ElfMaze(input);
+
+    for (let i = 1; i <= 10; i++) {
+      elfMaze.move();
+    }
+
+    return elfMaze.countEmptyTiles().toString();
   }
 
   public getFirstExpectedResult(): string {
@@ -12,12 +19,12 @@ export default class ConcretePuzzle extends Puzzle {
   }
 
   public solveSecond(input: string): string {
-    // WRITE SOLUTION FOR TEST 2
-    return 'day 1 solution 2';
+    const elfMaze = new ElfMaze(input);
+    return elfMaze.findRestRoundNumber().toString();
   }
 
   public getSecondExpectedResult(): string {
     // RETURN EXPECTED SOLUTION FOR TEST 2;
-    return 'day 1 solution 2';
+    return '20';
   }
 }

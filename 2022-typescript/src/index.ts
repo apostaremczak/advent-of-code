@@ -14,7 +14,7 @@ console.log(`Solving Day #${args[0]}`);
     const firstTestResult = puzzle.solveFirst(puzzle.getTestInput());
     const firstExpectedResult = puzzle.getFirstExpectedResult();
     console.log(`[TEST] Part 1: ${firstTestResult === firstExpectedResult ? ('✅ ') : (`❌  expected ${firstExpectedResult}, got ${firstTestResult}`)}`);
-    console.log('Part 1: ', puzzle.solveFirst(puzzle.getInput()));
+    // console.log('Part 1: ', puzzle.solveFirst(puzzle.getInput()));
     const secondTestResult = puzzle.solveSecond(puzzle.getTestInput());
     const secondExpectedResult = puzzle.getSecondExpectedResult();
     console.log(`[TEST] Part 2: ${secondTestResult === secondExpectedResult ? ('✅ ') : (`❌  expected ${secondExpectedResult}, got ${secondTestResult}`)}`);
