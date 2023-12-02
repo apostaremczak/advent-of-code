@@ -1,0 +1,5 @@
+.gradle
+.idea
+build
+src/**/*.txt
+*.ws.kts
