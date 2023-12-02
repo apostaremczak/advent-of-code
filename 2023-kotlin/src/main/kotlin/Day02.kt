@@ -71,7 +71,7 @@ fun main() {
     check(invalidTestGame.id == 100)
     check(!invalidTestGame.isPossible())
 
-    val testInput = readInput("Day02_test")
+    val testInput = solution.readInput("Day02_test")
     val testSolution1 = solution.part1(testInput)
     check(testSolution1 == 8) { "Expected 8, got $testSolution1" }
 
