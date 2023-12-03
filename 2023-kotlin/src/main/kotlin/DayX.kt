@@ -1,5 +1,5 @@
 class DayX : PuzzleSolution {
-    override val input: List<String> = readInput("Day02")
+    override val input: List<String> = readInput("DayX")
     override fun part1(input: List<String>): Int {
         return input.size
     }
