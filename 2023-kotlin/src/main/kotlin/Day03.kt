@@ -7,12 +7,13 @@ data class EngineSchematic(
     val numbers: Set<Number>,
     private val cellsOccupiedByNumbers: Map<Coord, Number>
 ) {
-    private val diffs = listOf(-1, 0, 1)
-    private val allDiffs: List<Pair<Int, Int>> = diffs.flatMap { rowDiff ->
-        diffs.map { colDiff ->
-            Pair(rowDiff, colDiff)
+    private val allDiffs = listOf(-1, 0, 1)
+        .flatMap { rowDiff ->
+            listOf(-1, 0, 1).map { colDiff ->
+                Pair(rowDiff, colDiff)
+            }
         }
-    }.filterNot { it == 0 to 0 }
+        .filterNot { it == 0 to 0 }
 
     companion object {
         fun fromStringMap(schematicStr: List<String>): EngineSchematic {
@@ -20,29 +21,19 @@ data class EngineSchematic(
             val numbers: MutableSet<Number> = mutableSetOf()
 
             schematicStr.forEachIndexed { rowIdx, line ->
-                var numberStr = ""
-                var numberCoords: MutableList<Coord> = mutableListOf()
-
-                line.forEachIndexed { colIdx, char ->
-                    if (char.isDigit()) {
-                        numberStr += char
-                        numberCoords.add(Coord(rowIdx, colIdx))
-                    } else {
-                        if (char != '.') {
-                            symbolCoords[Coord(rowIdx, colIdx)] = char
-                        }
-                        if (numberStr.isNotEmpty()) {
-                            numbers.add(Number(numberStr.toInt(), numberCoords.toSet()))
-
-                            numberCoords = mutableListOf()
-                            numberStr = ""
-                        }
+                // Find all numbers
+                val numbersInTheLine = Regex("(\\d+)").findAll(line).map { res ->
+                    val occupiedCells = (res.range.first..res.range.last).map { colIdx ->
+                        Coord(rowIdx, colIdx)
                     }
+                    Number(res.value.toInt(), occupiedCells.toSet())
                 }
+                numbers.addAll(numbersInTheLine)
 
-                // Finish reading numbers at the end of the line
-                if (numberStr.isNotEmpty()) {
-                    numbers.add(Number(numberStr.toInt(), numberCoords.toSet()))
+                // Find all symbols
+                Regex("([^.\\d])").findAll(line).forEach { res ->
+                    val symbolCoord = Coord(rowIdx, res.range.first)
+                    symbolCoords[symbolCoord] = res.value.single()
                 }
             }
 
