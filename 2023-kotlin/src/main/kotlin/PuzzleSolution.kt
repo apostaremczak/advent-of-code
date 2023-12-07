@@ -2,13 +2,18 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.system.measureTimeMillis
 
-interface PuzzleSolution {
-
+interface GenericPuzzleSolution<T : Any> {
     /**
-     * Reads lines from the given input txt file.
+     * Reads lines from the given input txt file and split it into lines.
      */
     fun readInput(name: String): List<String> =
             this.javaClass.getResource("$name.txt")?.readText()!!.lines().filter { it.isNotEmpty() }
+
+    /**
+     * Reads lines from the given input txt file without any splitting.
+     */
+    fun readInputNotSplit(name: String): String =
+            this.javaClass.getResource("$name.txt")?.readText()!!
 
     /**
      * Converts string to md5 hash.
@@ -22,11 +27,19 @@ interface PuzzleSolution {
      */
     fun Any?.println() = println(this)
 
-    fun part1(input: List<String>): Int
+    fun part1(input: T): Int
 
-    fun part2(input: List<String>): Int
+    fun part2(input: T): Int
 
-    val input: List<String>
+    val input: T
+
+    fun part1(): Int {
+        return part1(input)
+    }
+
+    fun part2(): Int {
+        return part2(input)
+    }
 
     fun run() {
         measureTimeMillis {
@@ -38,3 +51,8 @@ interface PuzzleSolution {
         }.let { println("Part 2 took $it ms") }
     }
 }
+
+
+interface PuzzleSolution : GenericPuzzleSolution<List<String>>
+
+interface PuzzleSolutionNonSplitInput : GenericPuzzleSolution<String>
