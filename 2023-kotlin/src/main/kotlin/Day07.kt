@@ -127,22 +127,22 @@ data class JokerHand(override val cards: String, override val originalCards: Str
 
 class Day07 : PuzzleSolution {
     override val input: List<String> = readInput("Day07")
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val hands = input.map { Hand.fromString(it) }.sorted()
         val points = hands.mapIndexed { index, hand ->
             val score = hand.bid * (index + 1)
             score
         }
-        return points.sum()
+        return points.sum().toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val hands = input.map { JokerHand.fromString(it) }.sorted()
         val points = hands.mapIndexed { index, hand ->
             val score = hand.bid * (index + 1)
             score
         }
-        return points.sum()
+        return points.sum().toString()
     }
     // 248046462 is too high
 }
@@ -186,10 +186,10 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = solution.readInput("Day07_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 6440) { "Expected 6440, got $testSolution1" }
+    check(testSolution1 == "6440") { "Expected 6440, got $testSolution1" }
 
     val testSolution2 = solution.part2(testInput)
-    check(testSolution2 == 5905) { "Expected 5905, got $testSolution2" }
+    check(testSolution2 == "5905") { "Expected 5905, got $testSolution2" }
 
     solution.run()
 }

@@ -27,17 +27,17 @@ interface GenericPuzzleSolution<T : Any> {
      */
     fun Any?.println() = println(this)
 
-    fun part1(input: T): Int
+    fun part1(input: T): String
 
-    fun part2(input: T): Int
+    fun part2(input: T): String
 
     val input: T
 
-    fun part1(): Int {
+    fun part1(): String {
         return part1(input)
     }
 
-    fun part2(): Int {
+    fun part2(): String {
         return part2(input)
     }
 

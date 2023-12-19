@@ -20,25 +20,25 @@ class Day06 : PuzzleSolution {
         return Regex("\\d+").findAll(line).map { it.value.toDouble() }.toList()
     }
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val totalTimes = getNums(input.first())
         val recordDistances = getNums(input.last())
         val boatRaces = totalTimes.zip(recordDistances).map { (totalTime, record) ->
             BoatRace(totalTime, record)
         }
         val waysToBeat = boatRaces.map { it.getWinningRangeLength() }
-        return waysToBeat.reduce(Int::times)
+        return waysToBeat.reduce(Int::times).toString()
     }
 
     private fun getNumsConcatenated(line: String): Double {
         return Regex("\\d+").findAll(line).map { it.value }.reduce(String::plus).toDouble()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val totalTime = getNumsConcatenated(input.first())
         val recordDistance = getNumsConcatenated(input.last())
         val boatRace = BoatRace(totalTime, recordDistance)
-        return boatRace.getWinningRangeLength()
+        return boatRace.getWinningRangeLength().toString()
     }
 }
 
@@ -51,11 +51,11 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = solution.readInput("Day06_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 288) { "Expected 288, got $testSolution1" }
+    check(testSolution1 == "288") { "Expected 288, got $testSolution1" }
 
 
     val testSolution2 = solution.part2(testInput)
-    check(testSolution2 == 71503) { "Expected 71503, got $testSolution2" }
+    check(testSolution2 == "71503") { "Expected 71503, got $testSolution2" }
 
     solution.run()
 }

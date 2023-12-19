@@ -25,21 +25,17 @@ data class Sequence(val elements: List<Int>) {
 
 class Day09 : PuzzleSolution {
     override val input: List<String> = readInput("Day09")
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val seqs = input.map { Sequence.fromString(it) }
         val nextTermsSum = seqs.sumOf { it.extrapolate().toLong() }
-        return nextTermsSum.toInt()
+        return nextTermsSum.toInt().toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val seqs = input.map { Sequence.fromString(it) }
         val previousTermsSum = seqs.sumOf { it.extrapolateBackwards().toLong() }
-        if (previousTermsSum > Int.MAX_VALUE) {
-            println("Integer overflow")
-            println(previousTermsSum)
-            return -1
-        }
-        return previousTermsSum.toInt()    }
+        return previousTermsSum.toString()
+    }
 }
 
 fun main() {
@@ -61,10 +57,10 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = solution.readInput("Day09_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 114) { "Expected 114, got $testSolution1" }
+    check(testSolution1 == "114") { "Expected 114, got $testSolution1" }
 
     val testSolution2 = solution.part2(testInput)
-    check(testSolution2 == 2) { "Expected 2, got $testSolution2" }
+    check(testSolution2 == "2") { "Expected 2, got $testSolution2" }
 
     solution.run()
 }

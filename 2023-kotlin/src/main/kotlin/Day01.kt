@@ -1,12 +1,12 @@
 class Day01 : PuzzleSolution {
     override val input: List<String> = readInput("Day01")
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val codes: List<Int> = input.map { line ->
             val digits: List<Char> = line.toList().filter { it.isDigit() }
             (digits.first().toString() + digits.last().toString()).toInt()
         }
-        return codes.sum()
+        return codes.sum().toString()
     }
 
 
@@ -48,9 +48,9 @@ class Day01 : PuzzleSolution {
         return (first + second).toInt()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val codes: List<Int> = input.map { parseLine(it) }
-        return codes.sum()
+        return codes.sum().toString()
     }
 }
 
@@ -59,10 +59,10 @@ fun main() {
 
     // test if implementation meets criteria from the description, like:
     val testInput1 = solution.readInput("Day01_test1")
-    check(solution.part1(testInput1) == 142)
+    check(solution.part1(testInput1) == "142")
 
     val testInput2 = solution.readInput("Day01_test2")
-    check(solution.part2(testInput2) == 281)
+    check(solution.part2(testInput2) == "281")
 
     check(solution.parseLine("2xjzgsjzfhzhm1") == 21)
     check(solution.parseLine("kvbhsseven2rkbllhrhvsevenfour2vf") == 72) { "Got ${solution.parseLine("kvbhsseven2rkbllhrhvsevenfour2vf")}" }

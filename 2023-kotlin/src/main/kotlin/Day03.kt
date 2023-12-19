@@ -67,20 +67,20 @@ data class EngineSchematic(
 
 class Day3 : PuzzleSolution {
     override val input: List<String> = readInput("Day03")
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val schematic = EngineSchematic.fromStringMap(input)
         val allAdjacentNumbers: Set<Number> = schematic.symbolCoords.flatMap { (symbolCoord, _) ->
             schematic.getNumbersAdjacentToSymbol(symbolCoord)
         }.toSet()
 
-        return allAdjacentNumbers.sumOf { it.value }
+        return allAdjacentNumbers.sumOf { it.value }.toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val schematic = EngineSchematic.fromStringMap(input)
         val gears = schematic.getGearRatios()
 
-        return gears.sum()
+        return gears.sum().toString()
     }
 }
 
@@ -90,10 +90,10 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = solution.readInput("Day03_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 4361) { "Expected 4361, got $testSolution1" }
+    check(testSolution1 == "4361") { "Expected 4361, got $testSolution1" }
 
     val testSolution2 = solution.part2(testInput)
-    check(testSolution2 == 467835) { "Expected 467835, got $testSolution2" }
+    check(testSolution2 == "467835") { "Expected 467835, got $testSolution2" }
 
     solution.run()
 }

@@ -57,20 +57,15 @@ data class Galaxy(val occupiedCoords: Set<GalaxyCoord>) {
 class Day11 : PuzzleSolution {
     override val input: List<String> = readInput("Day11")
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val galaxy = Galaxy.fromString(input).expand()
-        return galaxy.getDistancesSum().toInt()
+        return galaxy.getDistancesSum().toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val galaxy = Galaxy.fromString(input).expand(factor = 1000000)
         val distanceSum = galaxy.getDistancesSum()
-        if (distanceSum > Int.MAX_VALUE) {
-            println("Answer too large for Int")
-            println(distanceSum)
-            return -1
-        }
-        return distanceSum.toInt()
+        return distanceSum.toString()
     }
 }
 
@@ -80,7 +75,7 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = solution.readInput("Day11_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 374) { "Expected 374, got $testSolution1" }
+    check(testSolution1 == "374") { "Expected 374, got $testSolution1" }
 
     // Test expanding galaxies with different factors
     val testGalaxy = Galaxy.fromString(testInput)

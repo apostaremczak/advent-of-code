@@ -47,15 +47,15 @@ data class Game(val id: Int, val sets: List<GameSet>) {
 class Day02 : PuzzleSolution {
     override val input: List<String> = readInput("Day02")
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val games = input.map { Game.fromString(it) }
         val possibleGames = games.filter { it.isPossible() }.map { it.id }
-        return possibleGames.sum()
+        return possibleGames.sum().toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val gamePowers = input.map { Game.fromString(it) }.map { it.getPower() }
-        return gamePowers.sum()
+        return gamePowers.sum().toString()
     }
 }
 
@@ -73,11 +73,11 @@ fun main() {
 
     val testInput = solution.readInput("Day02_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 8) { "Expected 8, got $testSolution1" }
+    check(testSolution1 == "8") { "Expected 8, got $testSolution1" }
 
     check(validTestGame.getPower() == 48)
     val testSolution2 = solution.part2(testInput)
-    check(testSolution2 == 2286) { "Expected 2286, got $testSolution2" }
+    check(testSolution2 == "2286") { "Expected 2286, got $testSolution2" }
 
     solution.run()
 }

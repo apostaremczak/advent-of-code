@@ -30,13 +30,13 @@ class Day04 : PuzzleSolution {
         return Scratchcard(cardId.toInt(), parseNumberLine(winningStr), parseNumberLine(ownedStr))
     }
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         return input.sumOf { cardStr ->
             parseCard(cardStr).getScore()
-        }
+        }.toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val cardMappings = input.associate {
             val card = parseCard(it)
             card.id to card.wonDuplicates
@@ -51,7 +51,7 @@ class Day04 : PuzzleSolution {
             }
         }
 
-        return cardCopiesCount.values.sum()
+        return cardCopiesCount.values.sum().toString()
     }
 }
 
@@ -61,10 +61,10 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = solution.readInput("Day04_test")
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 13) { "Expected 13, got $testSolution1" }
+    check(testSolution1 == "13") { "Expected 13, got $testSolution1" }
 
     val testSolution2 = solution.part2(testInput)
-    check(testSolution2 == 30) { "Expected 30, got $testSolution2" }
+    check(testSolution2 == "30") { "Expected 30, got $testSolution2" }
 
     solution.run()
 }
