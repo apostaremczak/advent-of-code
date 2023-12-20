@@ -50,8 +50,21 @@ interface GenericPuzzleSolution<T : Any> {
             println("Solution Part 2\n${part2(input)}")
         }.let { println("Part 2 took $it ms") }
     }
-}
 
+    /**
+     * Calculate the greatest common denominator of two numbers
+     */
+    fun Long.gcd(other: Long): Long {
+        return if(other == 0L) this else other.gcd(this % other)
+    }
+
+    /**
+     * Calculate the least common multiple of a list of numbers
+     */
+    fun List<Long>.lcm(): Long {
+        return this.reduce { acc, i -> acc * i / acc.gcd(i) }
+    }
+}
 
 interface PuzzleSolution : GenericPuzzleSolution<List<String>>
 
