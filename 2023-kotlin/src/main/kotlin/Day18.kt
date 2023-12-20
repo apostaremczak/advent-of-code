@@ -81,21 +81,20 @@ data class Lagoon(val dugSpots: MutableList<LavaCoord>) {
 
 class Day18 : PuzzleSolution {
     override val input: List<String> = readInput("Day18")
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): String {
         val directions = input.map { LavaDirection.fromString(it) }
         val lagoon = Lagoon(mutableListOf())
         lagoon.digAll(directions)
 
-        return lagoon.findShoelaceArea().toInt()
+        return lagoon.findShoelaceArea().toString()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): String {
         val directions = input.map { LavaDirection.fromHexString(it) }
         val lagoon = Lagoon(mutableListOf())
         lagoon.digAll(directions)
 
-        println(lagoon.findShoelaceAreaDynamic())
-        return -1
+        return lagoon.findShoelaceAreaDynamic().toString()
     }
 }
 
@@ -105,10 +104,10 @@ fun main() {
 
     // test if implementation meets criteria from the description, like:
     val testSolution1 = solution.part1(testInput)
-    check(testSolution1 == 62) { "Expected 62, got $testSolution1" }
+    check(testSolution1 == "62") { "Expected 62, got $testSolution1" }
 
     val testSolution2 = solution.part2(testInput)
-//    check(testSolution2.toString() == "952408144115") { "Expected 952408144115, got $testSolution2" }
+    check(testSolution2.toString() == "952408144115") { "Expected 952408144115, got $testSolution2" }
 
     solution.run()
 }
