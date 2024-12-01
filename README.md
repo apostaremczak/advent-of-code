@@ -11,3 +11,4 @@ My not-always-successful attempts at solving [Advent of Code](https://adventofco
 | 2021 | Python    |
 | 2022 | TypeScript|
 | 2023 | Kotlin    |
+| 2024 | Java (?)  |
