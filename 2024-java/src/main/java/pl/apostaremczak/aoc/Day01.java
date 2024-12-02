@@ -4,40 +4,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day01 implements PuzzleSolution {
-    public Long solvePart1(String[] input) {
-        List<List<Long>> parsedInput = parseInput(input);
-        Long[] left = parsedInput.get(0).toArray(new Long[0]);
-        Arrays.sort(left);
-        Long[] right = parsedInput.get(1).toArray(new Long[0]);
-        Arrays.sort(right);
-
-        assert left.length == right.length;
-
-        long differences = 0L;
-        for (int i = 0; i < left.length; i++) {
-            differences += Math.abs(left[i] - right[i]);
-        }
-
-        return differences;
-    }
-
-
-    public Long solvePart2(String[] input) {
-        List<List<Long>> parsedInput = parseInput(input);
-        Collection<Long> left = parsedInput.get(0);
-        Collection<Long> right = parsedInput.get(1);
-
-        // For each element in the left list, count how many times it appears in the right list
-        // and multiply it by the element itself
-        long result = 0L;
-        for (long element : left) {
-            long count = Collections.frequency(right, element);
-            result += element * count;
-        }
-
-        return result;
-    }
+public class Day01 extends PuzzleSolution {
+    List<List<Long>> parsedInput;
 
     private List<List<Long>> parseInput(String[] input) {
         Pattern locationPattern = Pattern.compile("(\\d+)\\s+(\\d+)");
@@ -53,15 +21,52 @@ public class Day01 implements PuzzleSolution {
                 right.add(Long.parseLong(matcher.group(2)));
             }
         }
-        return List.of(left, right);
+        return Arrays.asList(left, right);
+    }
+
+    public Day01(String inputFilename) {
+        super(inputFilename);
+        parsedInput = parseInput(inputLines);
+    }
+
+    @Override
+    public Long solvePart1() {
+        Long[] left = parsedInput.get(0).toArray(new Long[0]);
+        Arrays.sort(left);
+        Long[] right = parsedInput.get(1).toArray(new Long[0]);
+        Arrays.sort(right);
+
+        assert left.length == right.length;
+
+        long differences = 0L;
+        for (int i = 0; i < left.length; i++) {
+            differences += Math.abs(left[i] - right[i]);
+        }
+
+        return differences;
+    }
+
+    @Override
+    public Long solvePart2() {
+        Collection<Long> left = parsedInput.get(0);
+        Collection<Long> right = parsedInput.get(1);
+
+        // For each element in the left list, count how many times it appears in the right list
+        // and multiply it by the element itself
+        long result = 0L;
+        for (long element : left) {
+            long count = Collections.frequency(right, element);
+            result += element * count;
+        }
+
+        return result;
     }
 
     public static void main(String[] args) {
-        Day01 day01 = new Day01();
-        String[] input = day01.readInput("src/main/resources/01.txt");
-        Long part1Solution = day01.solvePart1(input);
+        Day01 day01 = new Day01("src/main/resources/01.txt");
+        Long part1Solution = day01.solvePart1();
         System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day01.solvePart2(input);
+        Long part2Solution = day01.solvePart2();
         System.out.println("Part 2: " + part2Solution);
     }
 }
