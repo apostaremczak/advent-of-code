@@ -1,0 +1,25 @@
+package pl.apostaremczak.aoc;
+
+public class DayNUM extends PuzzleSolution {
+    public DayNUM(String inputFilename) {
+        super(inputFilename);
+    }
+
+    @Override
+    public Long solvePart1() {
+        return 0L;
+    }
+
+    @Override
+    public Long solvePart2() {
+        return 0L;
+    }
+
+    public static void main(String[] args) {
+        DayNUM dayNUM = new DayNUM("src/main/resources/NUM.txt");
+        Long part1Solution = dayNUM.solvePart1();
+        System.out.println("Part 1: " + part1Solution);
+        Long part2Solution = dayNUM.solvePart2();
+        System.out.println("Part 2: " + part2Solution);
+    }
+}
