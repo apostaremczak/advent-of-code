@@ -1,0 +1,21 @@
+package pl.apostaremczak.aoc;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class DayNUMTests {
+    private final DayNUM dayNUM = new DayNUM("src/test/resources/NUM.txt");
+
+    @Test
+    public void testSolvePart1() {
+        Long result = dayNUM.solvePart1();
+        assertEquals(0L, result);
+    }
+
+    @Test
+    public void testSolvePart2() {
+        Long result = dayNUM.solvePart2();
+        assertEquals(0L, result);
+    }
+}

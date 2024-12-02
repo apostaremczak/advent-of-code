@@ -1,6 +1,7 @@
 package pl.apostaremczak.aoc;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day02Tests {
