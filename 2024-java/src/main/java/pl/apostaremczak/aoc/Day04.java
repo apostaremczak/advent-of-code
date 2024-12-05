@@ -1,12 +1,12 @@
 package pl.apostaremczak.aoc;
 
 import pl.apostaremczak.aoc.util.Coord2D;
-import pl.apostaremczak.aoc.util.CoordinateHelpers;
+import pl.apostaremczak.aoc.util.DirectionSupport;
 import pl.apostaremczak.aoc.util.Map2D;
 
 import java.util.*;
 
-public class Day04 extends PuzzleSolution implements CoordinateHelpers {
+public class Day04 extends PuzzleSolution implements DirectionSupport {
     private final Map2D<Character> InputMap2D;
 
     public Day04(String inputFilename) {

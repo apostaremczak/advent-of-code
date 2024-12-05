@@ -1,6 +1,6 @@
 package pl.apostaremczak.aoc.util;
 
-public interface CoordinateHelpers {
+public interface DirectionSupport {
     Coord2D TOP = new Coord2D(-1, 0);
     Coord2D TOP_RIGHT = new Coord2D(-1, 1);
     Coord2D RIGHT = new Coord2D(0, 1);

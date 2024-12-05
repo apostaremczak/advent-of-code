@@ -3,7 +3,7 @@ package pl.apostaremczak.aoc.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Coord2D implements CoordinateHelpers {
+public class Coord2D implements DirectionSupport {
     final public Integer row;
     final public Integer column;
 
