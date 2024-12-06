@@ -1,6 +1,18 @@
 # Advent of Code 2024
 
-To automatically create a new solution for a day, run the following command:
+Despite being a programmer for quite a few years now and working with the JVM on a daily basis (since Scala is my main programming language), I've never actually actively developed anything in Java. Not even an original "Hello, world".
+
+Unfortunately, every once in a while, I have to interact with some Java code, mostly in the form of source code for libraries and frameworks that I use through Scala ([Apache Beam](https://beam.apache.org/) being a notable example).
+
+To combat my fear of the unknown, I've decided to familiarize myself with the original Beast™️and write my solutions to this year's Advent of Cod in Java. Wish me luck.
+
+Built with Java 23.
+
+![img.png](img.png){ width=400px }
+
+## Starting a new day 🌞
+
+To automatically create a new solution for the day, run the following command:
 
 ```bash
 make
