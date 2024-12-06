@@ -18,9 +18,9 @@ public class Map2D<T> {
     }
 
     public Optional<T> getAt(Coord2D coord) {
-        if (coord.row < 0 || coord.column < 0 || coord.row > MAX_ROW_INDEX || coord.column > MAX_COLUMN_INDEX) {
+        if (coord.row() < 0 || coord.column() < 0 || coord.row() > MAX_ROW_INDEX || coord.column() > MAX_COLUMN_INDEX) {
             return Optional.empty();
         }
-        return Optional.of(internal[coord.row][coord.column]);
+        return Optional.of(internal[coord.row()][coord.column()]);
     }
 }
