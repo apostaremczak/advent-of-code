@@ -8,7 +8,7 @@ To combat my fear of the unknown, I've decided to familiarize myself with the or
 
 Built with Java 23.
 
-![img.png](img.png){ width=400px }
+<img src="img.png" width="400"/>
 
 ## Starting a new day 🌞
 
