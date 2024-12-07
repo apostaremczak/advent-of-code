@@ -1,1 +1,8 @@
 .idea/
+
+*.csv
+/2018-scala/src/main/resources/
+/2019-scala/src/main/resources/
+/2020-python/puzzle_inputs/
+/2021-python/puzzle_inputs/
+*.txt
