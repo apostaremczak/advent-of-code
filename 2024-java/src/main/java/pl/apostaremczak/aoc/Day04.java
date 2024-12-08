@@ -12,9 +12,7 @@ public class Day04 extends PuzzleSolution implements DirectionSupport {
     public Day04(String inputFilename) {
         super(inputFilename);
 
-        this.InputMap2D = new Map2D<>(Arrays.stream(inputLines)
-                .map(line -> line.chars().mapToObj(c -> (char) c).toArray(Character[]::new))
-                .toArray(Character[][]::new));
+        this.InputMap2D = Map2D.fromStringInputLines(inputLines);
     }
 
     @Override
@@ -57,19 +55,19 @@ public class Day04 extends PuzzleSolution implements DirectionSupport {
     }
 
     private boolean isMasAt(Coord2D[] ray) {
-        if (InputMap2D.getAt(ray[0]).orElse(' ') != 'M') {
+        if (InputMap2D.safeGetAt(ray[0]).orElse(' ') != 'M') {
             return false;
         }
-        if (InputMap2D.getAt(ray[1]).orElse(' ') != 'A') {
+        if (InputMap2D.safeGetAt(ray[1]).orElse(' ') != 'A') {
             return false;
         }
-        return InputMap2D.getAt(ray[2]).orElse(' ') == 'S';
+        return InputMap2D.safeGetAt(ray[2]).orElse(' ') == 'S';
     }
 
     private boolean isMsAt(Coord2D[] ray) {
         Set<Character> firstRayChars = new HashSet<>(Arrays.asList(
-                InputMap2D.getAt(ray[0]).orElse(' '),
-                InputMap2D.getAt(ray[1]).orElse(' ')
+                InputMap2D.safeGetAt(ray[0]).orElse(' '),
+                InputMap2D.safeGetAt(ray[1]).orElse(' ')
         ));
         return firstRayChars.contains('M') && firstRayChars.contains('S');
     }

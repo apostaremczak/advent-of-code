@@ -18,6 +18,10 @@ public record Coord2D(Integer row, Integer column) implements DirectionSupport {
         return new Coord2D(times * this.row, times * this.column);
     }
 
+    public Coord2D minus(Coord2D otherCord) {
+        return new Coord2D(this.row - otherCord.row, this.column - otherCord.column);
+    }
+
     public List<Coord2D> getAllSurrounding() {
         List<Coord2D> surrounding = new ArrayList<>();
         for (Coord2D direction : Directions2D) {
