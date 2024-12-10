@@ -13,4 +13,8 @@ public interface DirectionSupport {
     Coord2D[] Directions2D = {
             TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT
     };
+
+    Coord2D[] StraightDirections2D = {
+            TOP, RIGHT, BOTTOM, LEFT
+    };
 }

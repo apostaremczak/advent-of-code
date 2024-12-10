@@ -1,7 +1,9 @@
 package pl.apostaremczak.aoc.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public record Coord2D(Integer row, Integer column) implements DirectionSupport {
 
@@ -22,9 +24,20 @@ public record Coord2D(Integer row, Integer column) implements DirectionSupport {
         return new Coord2D(this.row - otherCord.row, this.column - otherCord.column);
     }
 
+    /**
+     * All nodes around this coordinate point, including points on diagonal
+     */
     public List<Coord2D> getAllSurrounding() {
         List<Coord2D> surrounding = new ArrayList<>();
         for (Coord2D direction : Directions2D) {
+            surrounding.add(this.add(direction));
+        }
+        return surrounding;
+    }
+
+    public Set<Coord2D> getStraightSurrounding() {
+        Set<Coord2D> surrounding = new HashSet<>();
+        for (Coord2D direction : StraightDirections2D) {
             surrounding.add(this.add(direction));
         }
         return surrounding;
