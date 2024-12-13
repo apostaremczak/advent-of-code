@@ -2,9 +2,11 @@ package pl.apostaremczak.aoc;
 
 import pl.apostaremczak.aoc.util.Coord2D;
 import pl.apostaremczak.aoc.util.Map2D;
+import pl.apostaremczak.aoc.util.SubsetSupport;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Day08 extends PuzzleSolution {
@@ -41,27 +43,30 @@ public class Day08 extends PuzzleSolution {
 
     Set<Coord2D> findAntipodes(Set<Coord2D> antennaGroup) {
         Set<Coord2D> antipodes = new HashSet<>();
-        for (Coord2D a1 : antennaGroup) {
-            for (Coord2D a2 : antennaGroup) {
-                if (!a1.equals(a2)) {
-                    // Directed distance between two points: (a1 - a2) & (a2 - a1)
-                    // Antipode = a1 - (a2 - a1) = 2a1 - a2
-                    Coord2D antipode1 = a1.scalarMultiplication(2).minus(a2);
-                    if (this.AntennaMap.isWithinBounds(antipode1)) {
-                        antipodes.add(antipode1);
-                    }
-                    Coord2D antipode2 = a2.scalarMultiplication(2).minus(a1);
-                    if (this.AntennaMap.isWithinBounds(antipode2)) {
-                        antipodes.add(antipode2);
-                    }
-                }
+        Set<Set<Coord2D>> pairs = SubsetSupport.getAllPairs(antennaGroup);
+
+        for (Set<Coord2D> pair : pairs) {
+            List<Coord2D> pairL = pair.stream().toList();
+            Coord2D a1 = pairL.getFirst();
+            Coord2D a2 = pairL.getLast();
+            // Directed distance between two points: (a1 - a2) & (a2 - a1)
+            // Antipode = a1 - (a2 - a1) = 2a1 - a2
+            Coord2D antipode1 = a1.scalarMultiplication(2).minus(a2);
+            if (this.AntennaMap.isWithinBounds(antipode1)) {
+                antipodes.add(antipode1);
             }
+            Coord2D antipode2 = a2.scalarMultiplication(2).minus(a1);
+            if (this.AntennaMap.isWithinBounds(antipode2)) {
+                antipodes.add(antipode2);
+            }
+
         }
         return antipodes;
     }
 
     Set<Coord2D> findAllAntipodes(Set<Coord2D> antennaGroup) {
         Set<Coord2D> antipodes = new HashSet<>();
+        // This actually calculates the result twice: for (a1, a2) and (a2, a1), but the final set results does the deduplication anyway
         for (Coord2D a1 : antennaGroup) {
             for (Coord2D a2 : antennaGroup) {
                 if (!a1.equals(a2)) {
