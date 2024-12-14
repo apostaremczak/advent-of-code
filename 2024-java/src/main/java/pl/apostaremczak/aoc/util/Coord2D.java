@@ -44,7 +44,6 @@ public record Coord2D(Integer row, Integer column) implements DirectionSupport {
     }
 
     /**
-     *
      * @param angle (In degrees) Angle of rotation, must be a multiple of 90. Anticlockwise.
      * @return Rotated coordinates.
      */
@@ -59,5 +58,9 @@ public record Coord2D(Integer row, Integer column) implements DirectionSupport {
         assert ((Math.abs(intNewX - newX) < 0.00001) && (Math.abs(intNewY - newY) < 0.00001)) : "Rotation result produced non-integer coordinates";
 
         return new Coord2D((int) newX, (int) newY);
+    }
+
+    public Double euclideanDistance(Coord2D other) {
+        return Math.sqrt(Math.pow(this.row - other.row, 2) + Math.pow(this.column - other.column, 2));
     }
 }
