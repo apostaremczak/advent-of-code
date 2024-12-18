@@ -154,19 +154,7 @@ public class Day06 extends PuzzleSolution implements DirectionSupport {
      * Used for debugging; prints a visualization of the current state of the map.
      */
     private void printMap(HashSet<Coord2D> obstacles, Coord2D guardPosition, Coord2D guardDirection) {
-        char guardMarker;
-        if (guardDirection.equals(TOP)) {
-            guardMarker = '^';
-        } else if (guardDirection.equals(RIGHT)) {
-            guardMarker = '>';
-        } else if (guardDirection.equals(BOTTOM)) {
-            guardMarker = 'v';
-        } else if (guardDirection.equals(LEFT)) {
-            guardMarker = '<';
-        } else {
-            throw new IllegalArgumentException("Illegal guard direction: " + guardDirection);
-        }
-
+        String guardMarker = DirectionSupport.directionToString(guardDirection);
         for (int row = 0; row <= MaxRow; row++) {
             for (int col = 0; col <= MaxColumn; col++) {
                 Coord2D current = new Coord2D(row, col);
