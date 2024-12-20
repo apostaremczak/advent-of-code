@@ -46,4 +46,49 @@ public class CharacterMap2d extends Map2D<Character> {
         }
         return distancesFromStart;
     }
+
+    /**
+     * BFS for finding distances from the start point to all the points on the map
+     */
+    public Map<DirectedMovement, Long> getDirectedDistancesFrom(DirectedMovement start, Integer directionChangePenalty) {
+        PriorityQueue<State> queue = new PriorityQueue<>();
+        Map<DirectedMovement, Long> distancesFromStart = new HashMap<>();
+
+        queue.offer(new State(start, 0L));
+        distancesFromStart.put(start, 0L);
+
+        while (!queue.isEmpty()) {
+            State state = queue.remove();
+            Coord2D currentNode = state.move.position();
+            Coord2D currentDirection = state.move.direction();
+            long distanceFromStart = state.distanceFromStart;
+            DirectedMovement move = new DirectedMovement(currentNode, currentDirection);
+            if (distancesFromStart.getOrDefault(move, Long.MAX_VALUE) < distanceFromStart) {
+                continue;
+            }
+            Coord2D[] potentialDirections = {currentDirection, currentDirection.rotateRightAngle(90), currentDirection.rotateRightAngle(-90)};
+            int[] directionEdgeWeight = {1, 1 + directionChangePenalty, 1 + directionChangePenalty};
+            for (int i = 0; i < 3; i++) {
+                Coord2D nextDirection = potentialDirections[i];
+                Coord2D nextNode = currentNode.add(nextDirection);
+                DirectedMovement nextMove = new DirectedMovement(nextNode, nextDirection);
+                long nextNodeDistance = distanceFromStart + directionEdgeWeight[i];
+                // Only explore potentially shorter paths
+                if (this.isWithinBounds(nextNode) && !this.isWall(nextNode) && distancesFromStart.getOrDefault(nextMove, Long.MAX_VALUE) > nextNodeDistance) {
+                    queue.offer(new State(nextMove, nextNodeDistance));
+                    distancesFromStart.put(nextMove, nextNodeDistance);
+                }
+            }
+        }
+
+        return distancesFromStart;
+    }
+
+    private record State(DirectedMovement move, Long distanceFromStart) implements Comparable<State> {
+        @Override
+        public int compareTo(State o) {
+            return Long.compare(this.distanceFromStart, o.distanceFromStart);
+        }
+    }
 }
+
