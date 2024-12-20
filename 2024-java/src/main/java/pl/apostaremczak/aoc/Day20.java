@@ -1,87 +1,65 @@
 package pl.apostaremczak.aoc;
 
+import pl.apostaremczak.aoc.util.CharacterMap2d;
 import pl.apostaremczak.aoc.util.Coord2D;
-import pl.apostaremczak.aoc.util.Map2D;
 
 import java.util.*;
 
 public class Day20 extends PuzzleSolution {
     Coord2D StartPosition;
     Coord2D EndPosition;
-    Map<CheatPosition, Long> CheatedPathLengths = new HashMap<>();
     Long ShortestLegalPath = Long.MAX_VALUE;
-    //    Set<Coord2D> Walls;
-    Map2D<Character> Maze;
+    CharacterMap2d Maze;
     Long SavedTimeThreshold;
-    Set<CheatPosition> ExploredCheats = new HashSet<>();
+    Map<Coord2D, Long> DistancesFromStart;
+    Map<Coord2D, Long> DistancesFromEnd;
+
 
     public Day20(String inputFilename, Long savedTimeThreshold) {
         super(inputFilename);
-        Maze = Map2D.fromStringInputLines(inputLines);
+        Maze = CharacterMap2d.fromStringInputLines(inputLines, '#');
         StartPosition = Maze.findFirst('S').get();
         EndPosition = Maze.findFirst('E').get();
         SavedTimeThreshold = savedTimeThreshold;
+
+        DistancesFromStart = Maze.getDistancesFrom(StartPosition);
+        DistancesFromEnd = Maze.getDistancesFrom(EndPosition);
+        ShortestLegalPath = DistancesFromStart.get(EndPosition);
+    }
+
+    private Long countShortcuts(Integer maxShortcutLength) {
+        long shorterPathCount = 0L;
+
+        // Iterate over all non-wall points on the grid
+        for (int rowIdx = 0; rowIdx <= Maze.MAX_ROW_INDEX; rowIdx++) {
+            for (int colIdx = 0; colIdx <= Maze.MAX_COLUMN_INDEX; colIdx++) {
+                Coord2D currentPosition = new Coord2D(rowIdx, colIdx);
+                if (!Maze.isWall(currentPosition)) {
+                    // Check all the neighbors and check if the tile after the neighbor is free
+                    for (Coord2D teleport : Maze.getManhattanClosedBallPoints(currentPosition, maxShortcutLength)) {
+                        if (!Maze.isWall(teleport)) {
+                            // Teleporting from p to q through a cheat
+                            // d(S, p) + d(p, q) + d(q, E)
+                            long cheatedDistance = DistancesFromStart.get(currentPosition) + currentPosition.manhattanDistanceFrom(teleport) + DistancesFromEnd.get(teleport);
+                            if (ShortestLegalPath - cheatedDistance >= SavedTimeThreshold) {
+                                shorterPathCount++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return shorterPathCount;
     }
 
     @Override
     public Long solvePart1() {
-        findRaceTrackLength(new LinkedList<>(), StartPosition, Optional.empty());
-        // How many cheats would save you at least 100 picoseconds?
-        long result = 0;
-        for (long cheatedPathLength : CheatedPathLengths.values()) {
-            if (ShortestLegalPath - cheatedPathLength >= SavedTimeThreshold) {
-                result++;
-            }
-        }
-        return result;
+        return countShortcuts(2);
     }
 
     @Override
     public Long solvePart2() {
-        return 0L;
-    }
-
-    private Boolean isWall(Coord2D position) {
-        return Maze.safeGetAt(position).orElse('X').equals('#');
-    }
-
-    // DFS for finding track lengths
-    private void findRaceTrackLength(LinkedList<Coord2D> visited, Coord2D currentNode, Optional<CheatPosition> cheatPosition) {
-        visited.add(currentNode);
-
-        if (currentNode.equals(EndPosition)) {
-            long currentPathLength = visited.size();
-            if (cheatPosition.isEmpty()) {
-                if (currentPathLength < ShortestLegalPath) {
-                    ShortestLegalPath = currentPathLength;
-                }
-            } else {
-                CheatedPathLengths.put(cheatPosition.get(), currentPathLength);
-            }
-        }
-
-        for (Coord2D neighbor : currentNode.getStraightSurrounding()) {
-            if (!visited.contains(neighbor) && Maze.isWithinBounds(neighbor)) {
-                // Try cheating if it hasn't been done already and if the next tile after the wall is not a wall itself
-                if (isWall(neighbor) && cheatPosition.isEmpty()) {
-                    Coord2D direction = neighbor.minus(currentNode);
-                    Coord2D afterWallNode = neighbor.add(direction);
-                    if (Maze.isWithinBounds(afterWallNode) && !isWall(afterWallNode) && !visited.contains(afterWallNode)) {
-                        LinkedList<Coord2D> cheatVisited = new LinkedList<>(visited);
-                        cheatVisited.add(neighbor);
-                        CheatPosition cheat = new CheatPosition(neighbor, afterWallNode);
-                        if (!ExploredCheats.contains(cheat)) {
-                            ExploredCheats.add(cheat);
-                            findRaceTrackLength(cheatVisited, afterWallNode, Optional.of(cheat));
-                        }
-                    }
-                }
-                // Turn and proceed normally
-                if (!isWall(neighbor)) {
-                    findRaceTrackLength(new LinkedList<>(visited), neighbor, cheatPosition);
-                }
-            }
-        }
+        return countShortcuts(20);
     }
 
     public static void main(String[] args) {
@@ -91,9 +69,5 @@ public class Day20 extends PuzzleSolution {
         Long part2Solution = day20.solvePart2();
         System.out.println("Part 2: " + part2Solution);
     }
-}
-
-record CheatPosition(Coord2D first, Coord2D second) {
-
 }
 

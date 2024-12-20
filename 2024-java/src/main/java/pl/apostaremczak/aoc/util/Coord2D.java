@@ -60,7 +60,11 @@ public record Coord2D(Integer row, Integer column) implements DirectionSupport {
         return new Coord2D((int) newX, (int) newY);
     }
 
-    public Double euclideanDistance(Coord2D other) {
+    public Double euclideanDistanceFrom(Coord2D other) {
         return Math.sqrt(Math.pow(this.row - other.row, 2) + Math.pow(this.column - other.column, 2));
+    }
+
+    public Integer manhattanDistanceFrom(Coord2D other) {
+        return Math.abs(this.row - other.row) + Math.abs(this.column - other.column);
     }
 }

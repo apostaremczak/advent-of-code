@@ -15,7 +15,9 @@ public class Day20Tests {
 
     @Test
     public void testSolvePart2() {
-        Long result = day20.solvePart2();
-        assertEquals(0L, result);
+        final Day20 day = new Day20("src/test/resources/20.txt", 50L);
+
+        Long result = day.solvePart2();
+        assertEquals(285L, result);
     }
 }
