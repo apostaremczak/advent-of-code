@@ -13,14 +13,13 @@ public class Day16 extends PuzzleSolution {
 
     @Override
     public Long solvePart1() {
-        Maze maze = new Maze(inputLines);
+        ReindeerRaceMaze maze = new ReindeerRaceMaze(inputLines);
         return maze.getBestPathScore();
     }
 
     @Override
     public Long solvePart2() {
-        Maze maze = new Maze(inputLines);
-        return maze.countTilesOnBestPaths();
+        return 0L;
     }
 
     public static void main(String[] args) {
@@ -67,38 +66,29 @@ class MazeTile implements Comparable<MazeTile>, DirectionSupport {
         return tile;
     }
 
-    public Long countPotentialPaths() {
-        return (long) allPotentialPathEntries.size();
-    }
-
-    public String printShortestPath() {
-        StringBuilder representation = new StringBuilder();
-        for (StackEntry entry : this.getShortestPath()) {
-            Coord2D position = entry.tile().getPosition();
-            String positionRepresentation = "[" + position.row() + ", " + position.column() + "]";
-            Coord2D direction = entry.direction();
-            representation.append(DirectionSupport.directionToString(direction));
-            representation.append(positionRepresentation);
-            representation.append(" ");
-        }
-
-        return representation.toString();
-    }
-
     @Override
     public int compareTo(MazeTile o) {
         return Integer.compare(this.getDistance(), o.getDistance());
     }
+
+    @Override
+    public String toString() {
+        return "MazeTile{" +
+                "position=" + position +
+                ", distance=" + distance +
+                '}';
+    }
 }
 
-class Maze implements DirectionSupport {
+class ReindeerRaceMaze implements DirectionSupport {
     private final Coord2D StartTilePosition;
     private final Coord2D EndTilePosition;
     private final Coord2D StartDirection;
     private final Map<Coord2D, MazeTile> Tiles;
     private final Integer ShortestDistance;
+    Map<MazeTile, Set<MazeTile>> VisitedTilesOnTheWay = new HashMap<>();
 
-    public Maze(String[] inputLines) {
+    public ReindeerRaceMaze(String[] inputLines) {
         Map2D<Character> mazeAsArray = Map2D.fromStringInputLines(inputLines);
         Coord2D startTilePosition = null;
         Coord2D endTilePosition = null;
@@ -139,10 +129,6 @@ class Maze implements DirectionSupport {
         return (long) this.ShortestDistance;
     }
 
-    public Long countTilesOnBestPaths() {
-        return this.Tiles.get(this.EndTilePosition).countPotentialPaths();
-    }
-
     private void dijkstra() {
         MazeTile startTile = this.Tiles.get(this.StartTilePosition);
         startTile.setDistance(0);
@@ -152,10 +138,10 @@ class Maze implements DirectionSupport {
         PriorityQueue<StackEntry> unsettledTiles = new PriorityQueue<>();
 
         unsettledTiles.add(new StackEntry(startTile, StartDirection));
+        VisitedTilesOnTheWay.put(startTile, new HashSet<>());
 
         while (!unsettledTiles.isEmpty()) {
-            StackEntry currentTile = unsettledTiles.poll();
-            unsettledTiles.remove(currentTile);
+            StackEntry currentTile = unsettledTiles.remove();
             // Get all the possible next steps
             // Try continuing in the same direction or rotating 90 degrees clockwise and counterclockwise
             Coord2D currentDirection = currentTile.direction();
@@ -173,6 +159,15 @@ class Maze implements DirectionSupport {
                     if (!settledTiles.contains(nextTileEntry)) {
                         unsettledTiles.add(nextTileEntry);
                         calculateMinimumDistance(nextTile, currentTile.tile(), direction);
+
+                        VisitedTilesOnTheWay.merge(nextTile, new HashSet<>(Set.of(currentTile.tile())), (oldSet, newSet) -> {
+                            oldSet.addAll(newSet);
+                            return oldSet;
+                        });
+                        VisitedTilesOnTheWay.merge(nextTile, VisitedTilesOnTheWay.get(currentTile.tile()), (oldSet, newSet) -> {
+                            oldSet.addAll(newSet);
+                            return oldSet;
+                        });
                     }
                 }
             }
@@ -202,5 +197,13 @@ record StackEntry(MazeTile tile, Coord2D direction) implements Comparable<StackE
     @Override
     public int compareTo(StackEntry o) {
         return this.tile.compareTo(o.tile);
+    }
+
+    @Override
+    public String toString() {
+        return "StackEntry{" +
+                "tile=" + tile.getPosition() +
+                ", direction=" + DirectionSupport.directionToString(direction) +
+                '}';
     }
 }
