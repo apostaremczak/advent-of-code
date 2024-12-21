@@ -13,7 +13,7 @@ public class Day17Tests {
     public void testSolvePart1() {
         Computer computer = Computer.fromInput(day17.fullRawInput);
         computer.run();
-        String result = computer.printOutput();
+        String result = computer.getPrintableOutput();
         assertEquals("4,6,3,5,6,3,5,2,1,0", result);
     }
 
@@ -27,7 +27,7 @@ public class Day17Tests {
     @Test
     public void testComputer1() {
         Computer computer = new Computer();
-        computer.RegisterC = 9;
+        computer.RegisterC = 9L;
         computer.Inputs = List.of(2, 6);
         computer.run();
 
@@ -37,21 +37,27 @@ public class Day17Tests {
     @Test
     public void testComputer2() {
         Computer computer = new Computer();
-        computer.RegisterA = 10;
-        computer.Inputs = List.of(5,0,5,1,5,4);
+        computer.RegisterA = 10L;
+        computer.Inputs = List.of(5, 0, 5, 1, 5, 4);
         computer.run();
 
-        assertEquals("0,1,2", computer.printOutput());
+        assertEquals("0,1,2", computer.getPrintableOutput());
     }
 
     @Test
     public void testComputer3() {
         Computer computer = new Computer();
-        computer.RegisterA = 2024;
-        computer.Inputs = List.of(0,1,5,4,3,0);
+        computer.RegisterA = 2024L;
+        computer.Inputs = List.of(0, 1, 5, 4, 3, 0);
         computer.run();
 
-        assertEquals("4,2,5,6,7,7,7,7,3,1,0", computer.printOutput());
+        assertEquals("4,2,5,6,7,7,7,7,3,1,0", computer.getPrintableOutput());
         assertEquals(0, computer.RegisterA);
+    }
+
+    @Test
+    public void testGetOutputForRegisterA() {
+        Day17 day = new Day17("src/test/resources/17_3.txt");
+        assertEquals("0,5,5,3,0", day.getOutputForRegisterA(12321L));
     }
 }

@@ -1,53 +1,82 @@
 package pl.apostaremczak.aoc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day17 extends PuzzleSolution {
+    Computer computer;
+
     public Day17(String inputFilename) {
         super(inputFilename);
+        this.computer = Computer.fromInput(fullRawInput);
     }
 
     @Override
     public Long solvePart1() {
-        Computer computer = Computer.fromInput(fullRawInput);
         computer.run();
-        System.out.println(computer.printOutput());
+        System.out.println("Part 1: " + computer.getPrintableOutput());
+
         return 0L;
     }
 
     @Override
     public Long solvePart2() {
-        for (int registerA = 100_000_000; registerA < 1_000_000_000; registerA++) {
-            assert registerA < Integer.MAX_VALUE;
-            Computer computer = Computer.fromInput(fullRawInput);
-            computer.RegisterA = registerA;
-            computer.run();
-            if (computer.printInput().equals(computer.printOutput())) {
-                return (long) registerA;
+        // A **quine** is a computer program that takes no input and produces a copy of its own source code as its only output.
+        return findRegisterA(0, "").orElse(0L);
+    }
+
+    public String getOutputForRegisterA(Long registerAValue) {
+        Computer computer = Computer.fromInput(fullRawInput);
+        computer.RegisterA = registerAValue;
+        computer.run();
+        return computer.getPrintableOutput();
+    }
+
+    // Great explanation of binary operations by HyperNeutrino! https://www.youtube.com/watch?v=y-UPxMAh2N8
+    public OptionalLong findRegisterA(Integer index, String currentAnswerInBinary) {
+        if (index != 0) {
+            long currentRegisterA = Long.parseLong(currentAnswerInBinary, 2);
+            if (getOutputForRegisterA(currentRegisterA).equals(computer.printInput())) {
+                return OptionalLong.of(currentRegisterA);
+            }
+            if (index == computer.Inputs.size()) {
+                return OptionalLong.empty();
             }
         }
-        return 0L;
+
+        // Search for the next 3 bits of the answer
+        long searchRangeStart = index == 0 ? 0 : Long.parseLong(currentAnswerInBinary + "000", 2);
+        long searchRangeEnd = index == 0 ? 3 : Long.parseLong(currentAnswerInBinary + "111", 2);
+        String expectedOutput = String.join(",", computer.Inputs.reversed().subList(0, index + 1).reversed().stream().map(String::valueOf).toList());
+        for (long a = searchRangeStart; a <= searchRangeEnd; a++) {
+            String searchOutput = getOutputForRegisterA(a);
+            if (searchOutput.equals(expectedOutput)) {
+                OptionalLong nextSearch = findRegisterA(index + 1, Long.toBinaryString(a));
+                if (nextSearch.isEmpty()) {
+                    continue;
+                }
+                return nextSearch;
+            }
+        }
+
+        return OptionalLong.empty();
     }
 
     public static void main(String[] args) {
         Day17 day17 = new Day17("src/main/resources/17.txt");
-        Long part1Solution = day17.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
+        day17.solvePart1();
         Long part2Solution = day17.solvePart2();
         System.out.println("Part 2: " + part2Solution);
     }
 }
 
 class Computer {
-    Integer RegisterA = 0;
-    Integer RegisterB = 0;
-    Integer RegisterC = 0;
+    Long RegisterA = 0L;
+    Long RegisterB = 0L;
+    Long RegisterC = 0L;
     Integer InstructionPointer = 0;
-    List<Integer> Outputs = new ArrayList<>();
+    List<Long> Outputs = new ArrayList<>();
     List<Integer> Inputs;
 
     public static Computer fromInput(String fullRawInput) {
@@ -62,9 +91,9 @@ class Computer {
                 """);
         Matcher matcher = computerPattern.matcher(fullRawInput);
         if (matcher.find()) {
-            computer.RegisterA = Integer.parseInt(matcher.group(1));
-            computer.RegisterB = Integer.parseInt(matcher.group(2));
-            computer.RegisterC = Integer.parseInt(matcher.group(3));
+            computer.RegisterA = Long.parseLong(matcher.group(1));
+            computer.RegisterB = Long.parseLong(matcher.group(2));
+            computer.RegisterC = Long.parseLong(matcher.group(3));
             computer.Inputs = Arrays.stream(matcher.group(4).split(",")).map(Integer::parseInt).toList();
         } else {
             throw new IllegalArgumentException("Failed to parse computer instructions");
@@ -72,12 +101,12 @@ class Computer {
         return computer;
     }
 
-    public Integer comboOperand(Integer opcode) {
+    public Long comboOperand(Integer opcode) {
         return switch (opcode) {
-            case 0 -> 0;
-            case 1 -> 1;
-            case 2 -> 2;
-            case 3 -> 3;
+            case 0 -> 0L;
+            case 1 -> 1L;
+            case 2 -> 2L;
+            case 3 -> 3L;
             case 4 -> RegisterA;
             case 5 -> RegisterB;
             case 6 -> RegisterC;
@@ -88,14 +117,13 @@ class Computer {
 
     public void run() {
         while (InstructionPointer < Inputs.size()) {
-            if (Outputs.size() > Inputs.size()) {
-                break;
-            }
             Integer opcode = Inputs.get(InstructionPointer);
             Integer operand = Inputs.get(InstructionPointer + 1);
             switch (opcode) {
                 case 0:
-                    RegisterA = (int) (RegisterA / Math.pow(2, comboOperand(operand)));
+                    // Division can be replaced by bit shifting
+                    // a // 2^x == a >> x
+                    RegisterA = RegisterA >> comboOperand(operand);
                     InstructionPointer += 2;
                     break;
                 case 1:
@@ -122,11 +150,11 @@ class Computer {
                     InstructionPointer += 2;
                     break;
                 case 6:
-                    RegisterB = (int) (RegisterA / Math.pow(2, comboOperand(operand)));
+                    RegisterB = RegisterA >> comboOperand(operand);
                     InstructionPointer += 2;
                     break;
                 case 7:
-                    RegisterC = (int) (RegisterA / Math.pow(2, comboOperand(operand)));
+                    RegisterC = RegisterA >> comboOperand(operand);
                     InstructionPointer += 2;
                     break;
                 default:
@@ -135,7 +163,7 @@ class Computer {
         }
     }
 
-    public String printOutput() {
+    public String getPrintableOutput() {
         List<String> outputStrings = Outputs.stream().map(String::valueOf).toList();
         return String.join(",", outputStrings);
     }
