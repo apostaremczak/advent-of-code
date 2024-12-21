@@ -7,67 +7,30 @@ import pl.apostaremczak.aoc.util.DirectionSupport;
 import java.util.*;
 
 public class Day21 extends PuzzleSolution {
+    private final Map<CacheKey, Long> ShortestMovesCache = new HashMap<>();
+
     public Day21(String inputFilename) {
         super(inputFilename);
     }
 
     @Override
     public Long solvePart1() {
-        // In summary, there are the following keypads:
-        Keypad myKeypad = Keypad.buildDirectional();
-        Keypad robotKeyboard = Keypad.buildDirectional();
-        Keypad doorRobotKeypad = Keypad.buildNumeric();
-
-        long result = 0L;
-        for (String code : inputLines) {
-            List<Character> doorCodeProgram = code.chars().mapToObj(c -> (char) c).toList();
-            // For each character in the program, find the shortest possible path to the button
-            for (Character destination : doorCodeProgram) {
-                Coord2D from = doorRobotKeypad.CurrentPosition;
-                Coord2D doorRobotMove = doorRobotKeypad.moveTo(destination);
-                Set<String> potentialDoorRobotSteps = doorRobotKeypad.moveToVisualRepresentations(doorRobotMove, from);
-                for (String doorRobotSteps : potentialDoorRobotSteps) {
-
-                }
-            }
-
-            List<Character> doorRobotKeypadMoves = doorRobotKeypad.findMovesForProgram(doorCodeProgram);
-            List<Character> robotMoves = robotKeyboard.findMovesForProgram(doorRobotKeypadMoves);
-            List<Character> myMoves = myKeypad.findMovesForProgram(robotMoves);
-            String myMovesString = Keypad.movesToString(myMoves);
-            System.out.println(myMovesString);
-            long numericPartOfCode = Long.parseLong(code.substring(0, code.length() - 1));
-            result += (numericPartOfCode * myMovesString.length());
-            System.out.println(myMovesString.length() + " * " + numericPartOfCode);
-        }
-        return result;
-    }
-
-    public String findMyMoves(Character codeLetter) {
-        Keypad myKeypad = Keypad.buildDirectional();
-        Keypad robotKeyboard = Keypad.buildDirectional();
-        Keypad doorRobotKeypad = Keypad.buildNumeric();
-
-        List<Character> doorRobotKeypadMoves = doorRobotKeypad.findMovesForProgram(List.of(codeLetter));
-        List<Character> robotMoves = robotKeyboard.findMovesForProgram(doorRobotKeypadMoves);
-        List<Character> myMoves = myKeypad.findMovesForProgram(robotMoves);
-        return Keypad.movesToString(myMoves);
-    }
-
-    public String findShortestMovesForProgram(List<Character> program, LinkedList<Keypad> downstreamRobotKeypads) {
-        Keypad keypad = downstreamRobotKeypads.removeFirst();
-
-        if (downstreamRobotKeypads.isEmpty()) {
-            List<Character> moves = keypad.findMovesForProgram(program);
-            return Keypad.movesToString(moves);
-        }
-
-        return "f";
+        return solveForNRobots(3);
     }
 
     @Override
     public Long solvePart2() {
-        return 0L;
+        return solveForNRobots(26);
+    }
+
+    private Long solveForNRobots(Integer numberOfRobots) {
+        long result = 0;
+        for (String code : inputLines) {
+            long minValue = getShortestMoveLength(Keypad.buildNumeric(), code, numberOfRobots);
+            int numericValue = Integer.parseInt(code.substring(0, code.length() - 1));
+            result += minValue * numericValue;
+        }
+        return result;
     }
 
     public static void main(String[] args) {
@@ -77,16 +40,45 @@ public class Day21 extends PuzzleSolution {
         Long part2Solution = day21.solvePart2();
         System.out.println("Part 2: " + part2Solution);
     }
+
+    // Great caching technique from https://www.reddit.com/r/adventofcode/comments/1hj2odw/comment/m343kus/
+    public Long getShortestMoveLength(Keypad keypad, String code, Integer numberOfRobots) {
+        CacheKey cacheKey = new CacheKey(keypad.size(), code, numberOfRobots);
+        if (ShortestMovesCache.containsKey(cacheKey)) {
+            return ShortestMovesCache.get(cacheKey);
+        }
+
+        if (numberOfRobots == 0) {
+            ShortestMovesCache.put(cacheKey, (long) code.length());
+            return (long) code.length();
+        }
+
+        long minimalLength = 0;
+        int numberOfNewRobots = numberOfRobots - 1;
+        Character currentButton = 'A';
+        for (Character destinationButton : code.toCharArray()) {
+            Set<String> possibleMoves = keypad.allMovesBetweenButtons(currentButton, destinationButton);
+            minimalLength += possibleMoves.stream().map(moveChars ->
+                    getShortestMoveLength(Keypad.buildDirectional(), moveChars, numberOfNewRobots)
+            ).mapToLong(i -> i).min().getAsLong();
+
+            currentButton = destinationButton;
+        }
+
+        ShortestMovesCache.put(cacheKey, minimalLength);
+        return minimalLength;
+    }
+
+    private record CacheKey(Integer KeypadLength, String code, Integer numberOfRobots) {
+    }
 }
 
 class Keypad {
-    public final Map<Character, Coord2D> Buttons = new HashMap<>();
-    private Coord2D StartPosition;
-    public Coord2D CurrentPosition;
+    private final Map<Character, Coord2D> Buttons = new HashMap<>();
     public static Character EmptyMove = ' ';
     public static Character[][] NumericButtons = {{'7', '8', '9'}, {'4', '5', '6'}, {'1', '2', '3'}, {Keypad.EmptyMove, '0', 'A'}};
     public static Character[][] DirectionalButtons = {{Keypad.EmptyMove, '^', 'A'}, {'<', 'v', '>'}};
-    public Coord2D EmptySpotLocation;
+    private final Coord2D EmptySpotLocation;
 
     public Keypad(Character[][] buttons) {
         for (int rowIdx = 0; rowIdx < buttons.length; rowIdx++) {
@@ -94,14 +86,13 @@ class Keypad {
                 Character button = buttons[rowIdx][columnIdx];
                 Coord2D coord = new Coord2D(rowIdx, columnIdx);
                 Buttons.put(button, coord);
-                if (button == 'A') {
-                    StartPosition = coord;
-                }
             }
         }
-
-        CurrentPosition = StartPosition;
         EmptySpotLocation = Buttons.get(EmptyMove);
+    }
+
+    public Integer size() {
+        return Buttons.size();
     }
 
     public static Keypad buildNumeric() {
@@ -112,23 +103,15 @@ class Keypad {
         return new Keypad(DirectionalButtons);
     }
 
-    public Coord2D moveTo(Coord2D to) {
-        Coord2D move = to.minus(CurrentPosition);
-        CurrentPosition = to;
-        return move;
-    }
-
-    public Coord2D moveTo(Character to) {
-        Coord2D endPosition = Buttons.get(to);
-        return moveTo(endPosition);
-    }
-
-    public Set<String> moveToVisualRepresentations(Coord2D move, Coord2D from) {
+    public Set<String> allMovesBetweenButtons(Character fromChar, Character toChar) {
+        Coord2D from = Buttons.get(fromChar);
+        Coord2D to = Buttons.get(toChar);
+        Coord2D move = to.minus(from);
         Set<String> representations = new HashSet<>();
 
         // Horizontal moves
         int numHorizontalSymbols = Math.abs(move.column());
-        char horizontalSymbol = EmptyMove;
+        char horizontalSymbol;
         if (move.column() < 0) {
             // Moving left
             horizontalSymbol = '<';
@@ -139,7 +122,7 @@ class Keypad {
 
         // Vertical moves
         int numVerticalSymbols = Math.abs(move.row());
-        char verticalSymbol = EmptyMove;
+        char verticalSymbol;
         if (move.row() < 0) {
             // Going up
             verticalSymbol = '^';
@@ -191,29 +174,26 @@ class Keypad {
             legalMoves.add(potentialMove + "A");
         }
 
-        return legalMoves;
-    }
-
-    public List<Character> findMovesForProgram(List<Character> program) {
-        List<Character> representation = new ArrayList<>();
-        for (Character destination : program) {
-            Coord2D move = moveTo(destination);
-//            representation.addAll(moveToVisualRepresentations(move).stream().toList().getFirst().chars().mapToObj(c -> (char) c).toList());
+        // Give priority to moves that do not change the direction so often (e.g. '>^>' should be dropped in favor of '>>^'
+        Map<String, Integer> directionChangeCount = new HashMap<>();
+        for (String legalMove : legalMoves) {
+            int directionChanges = 0;
+            for (int i = 0; i < legalMove.length() - 1; i++) {
+                if (legalMove.charAt(i) != legalMove.charAt(i + 1)) {
+                    directionChanges++;
+                }
+            }
+            directionChangeCount.put(legalMove, directionChanges);
         }
-        returnToStart();
-        return representation;
-    }
+        int fewestDirectionChanges = directionChangeCount.values().stream().min(Integer::compareTo).get();
 
-    // Move the robot hand back to the initial position
-    private void returnToStart() {
-        CurrentPosition = StartPosition;
-    }
-
-    public static String movesToString(List<Character> moves) {
-        StringBuilder rep = new StringBuilder();
-        for (Character move : moves) {
-            rep.append(move);
+        Set<String> legalMovesWithFewestDirectionChanges = new HashSet<>();
+        for (Map.Entry<String, Integer> entry : directionChangeCount.entrySet()) {
+            if (entry.getValue() == fewestDirectionChanges) {
+                legalMovesWithFewestDirectionChanges.add(entry.getKey());
+            }
         }
-        return rep.toString();
+
+        return legalMovesWithFewestDirectionChanges;
     }
 }
