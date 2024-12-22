@@ -78,6 +78,24 @@ public class Day13 extends PuzzleSolution {
         super(inputFilename);
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day13 day = new Day13("src/main/resources/13.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         return Arrays.stream(fullRawInput.split("\\n\\n"))
@@ -95,13 +113,5 @@ public class Day13 extends PuzzleSolution {
                 .map(Arcade::getRequiredTokens)
                 .mapToLong(l -> l)
                 .sum();
-    }
-
-    public static void main(String[] args) {
-        Day13 day13 = new Day13("src/main/resources/13.txt");
-        Long part1Solution = day13.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day13.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

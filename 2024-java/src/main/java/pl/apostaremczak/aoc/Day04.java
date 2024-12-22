@@ -15,6 +15,24 @@ public class Day04 extends PuzzleSolution implements DirectionSupport {
         this.InputMap2D = Map2D.fromStringInputLines(inputLines);
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day04 day = new Day04("src/main/resources/04.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         List<Coord2D> xLocations = findAllLocationsOf('X');
@@ -84,13 +102,5 @@ public class Day04 extends PuzzleSolution implements DirectionSupport {
         }
 
         return locations;
-    }
-
-    public static void main(String[] args) {
-        Day04 day04 = new Day04("src/main/resources/04.txt");
-        Long part1Solution = day04.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day04.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

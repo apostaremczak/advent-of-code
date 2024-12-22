@@ -1,6 +1,9 @@
 package pl.apostaremczak.aoc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.OptionalLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +13,25 @@ public class Day17 extends PuzzleSolution {
     public Day17(String inputFilename) {
         super(inputFilename);
         this.computer = Computer.fromInput(fullRawInput);
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day17 day = new Day17("src/main/resources/17.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+
     }
 
     @Override
@@ -61,13 +83,6 @@ public class Day17 extends PuzzleSolution {
         }
 
         return OptionalLong.empty();
-    }
-
-    public static void main(String[] args) {
-        Day17 day17 = new Day17("src/main/resources/17.txt");
-        day17.solvePart1();
-        Long part2Solution = day17.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 

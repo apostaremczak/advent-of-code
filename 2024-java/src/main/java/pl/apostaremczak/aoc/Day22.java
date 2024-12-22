@@ -5,6 +5,16 @@ import pl.apostaremczak.aoc.util.SlidingWindowIterator;
 import java.util.*;
 import java.util.stream.Collectors;
 
+interface MonkeySecretHelper {
+    static Long evolveSecret(Long currentSecret) {
+        long bits = 16777216L; // = 2 ^ 24
+        long secret = ((currentSecret * 64) ^ currentSecret) % bits;
+        secret = ((secret / 32) ^ secret) % bits;
+        secret = ((secret * 2048) ^ secret) % bits;
+        return secret;
+    }
+}
+
 public class Day22 extends PuzzleSolution {
     Set<Monkey> Monkeys;
 
@@ -14,6 +24,24 @@ public class Day22 extends PuzzleSolution {
                 .map(Long::parseLong)
                 .map(secret -> Monkey.fromSecret(secret, 2000))
                 .collect(Collectors.toSet());
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day22 day = new Day22("src/main/resources/22.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
     }
 
     @Override
@@ -49,14 +77,6 @@ public class Day22 extends PuzzleSolution {
         return profitsPerChangePattern.values().stream().mapToLong(l -> l).max().orElse(0L);
     }
 
-    public static void main(String[] args) {
-        Day22 day22 = new Day22("src/main/resources/22.txt");
-        Long part1Solution = day22.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day22.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
-    }
-
     private record ChangePattern(int a, int b, int c, int d) {
     }
 }
@@ -73,15 +93,5 @@ record Monkey(Long initialSecret, Long finalSecret, ArrayList<Integer> prices) {
         }
 
         return new Monkey(secret, evolvedSecret, prices);
-    }
-}
-
-interface MonkeySecretHelper {
-    static Long evolveSecret(Long currentSecret) {
-        long bits = 16777216L; // = 2 ^ 24
-        long secret = ((currentSecret * 64) ^ currentSecret) % bits;
-        secret = ((secret / 32) ^ secret) % bits;
-        secret = ((secret * 2048) ^ secret) % bits;
-        return secret;
     }
 }

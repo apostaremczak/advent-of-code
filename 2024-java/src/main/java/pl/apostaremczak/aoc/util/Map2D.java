@@ -17,6 +17,12 @@ public class Map2D<T> {
         }
     }
 
+    public static Map2D<Character> fromStringInputLines(String[] inputLines) {
+        return new Map2D<>(Arrays.stream(inputLines)
+                .map(line -> line.chars().mapToObj(c -> (char) c).toArray(Character[]::new))
+                .toArray(Character[][]::new));
+    }
+
     public Optional<T> safeGetAt(Coord2D coord) {
         if (!isWithinBounds(coord)) {
             return Optional.empty();
@@ -56,12 +62,6 @@ public class Map2D<T> {
             }
         }
         return occurrences;
-    }
-
-    public static Map2D<Character> fromStringInputLines(String[] inputLines) {
-        return new Map2D<>(Arrays.stream(inputLines)
-                .map(line -> line.chars().mapToObj(c -> (char) c).toArray(Character[]::new))
-                .toArray(Character[][]::new));
     }
 
     public Iterator<Coord2D> positionIterator() {

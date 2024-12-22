@@ -18,6 +18,24 @@ public class Day19 extends PuzzleSolution {
         }
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day19 day = new Day19("src/main/resources/19.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     public Long countPossibleArrangements(String design) {
         if (Cache.containsKey(design)) {
             return Cache.get(design);
@@ -43,13 +61,5 @@ public class Day19 extends PuzzleSolution {
     @Override
     public Long solvePart2() {
         return PossibleArrangementCount.values().stream().mapToLong(l -> l).sum();
-    }
-
-    public static void main(String[] args) {
-        Day19 day19 = new Day19("src/main/resources/19.txt");
-        Long part1Solution = day19.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day19.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

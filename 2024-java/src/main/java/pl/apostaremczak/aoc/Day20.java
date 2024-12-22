@@ -3,7 +3,7 @@ package pl.apostaremczak.aoc;
 import pl.apostaremczak.aoc.util.CharacterMap2d;
 import pl.apostaremczak.aoc.util.Coord2D;
 
-import java.util.*;
+import java.util.Map;
 
 public class Day20 extends PuzzleSolution {
     Coord2D StartPosition;
@@ -25,6 +25,24 @@ public class Day20 extends PuzzleSolution {
         DistancesFromStart = Maze.getDistancesFrom(StartPosition);
         DistancesFromEnd = Maze.getDistancesFrom(EndPosition);
         ShortestLegalPath = DistancesFromStart.get(EndPosition);
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day20 day = new Day20("src/main/resources/20.txt", 100L);
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
     }
 
     private Long countShortcuts(Integer maxShortcutLength) {
@@ -60,14 +78,6 @@ public class Day20 extends PuzzleSolution {
     @Override
     public Long solvePart2() {
         return countShortcuts(20);
-    }
-
-    public static void main(String[] args) {
-        Day20 day20 = new Day20("src/main/resources/20.txt", 100L);
-        Long part1Solution = day20.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day20.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 

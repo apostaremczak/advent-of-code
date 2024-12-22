@@ -1,10 +1,32 @@
 package pl.apostaremczak.aoc;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Optional;
 
 public class Day09 extends PuzzleSolution {
     public Day09(String inputFilename) {
         super(inputFilename);
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day09 day = new Day09("src/main/resources/09.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+
     }
 
     @Override
@@ -20,14 +42,6 @@ public class Day09 extends PuzzleSolution {
         system.compactBlocks();
         return system.calculateChecksum();
     }
-
-    public static void main(String[] args) {
-        Day09 day09 = new Day09("src/main/resources/09.txt");
-        Long part1Solution = day09.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day09.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
-    }
 }
 
 class Filesystem {
@@ -37,7 +51,6 @@ class Filesystem {
     Map<Integer, Integer> FileIdBlockSizes;
 
     public Filesystem(String diskMap) {
-        int index = 0;
         int fileBlockId = 0;
         boolean isFile = true;
         LinkedList<Optional<Integer>> blocks = new LinkedList<>();
@@ -107,7 +120,6 @@ class Filesystem {
     }
 
     public void compactBlocks() {
-//        System.out.println("Starting from " + this.toString());
         while (this.HighestUnmodifiedFileId > 0) {
             Optional<Integer> fileBlock = Optional.of(this.HighestUnmodifiedFileId);
             // Find the number of files with this ID

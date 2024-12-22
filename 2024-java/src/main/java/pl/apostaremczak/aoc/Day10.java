@@ -36,6 +36,24 @@ public class Day10 extends PuzzleSolution {
         this.ReachableTops = reachableTops;
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day10 day = new Day10("src/main/resources/10.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         long result = 0;
@@ -58,12 +76,11 @@ public class Day10 extends PuzzleSolution {
         return result;
     }
 
-
     /**
      * BFS: Count the number of distinct mountain tops of height 9 that can be reached from the starting point
      */
     public Integer getTrailheadScore(Coord2D startingPoint) {
-       return new HashSet<>(this.ReachableTops.get(startingPoint)).size();
+        return new HashSet<>(this.ReachableTops.get(startingPoint)).size();
     }
 
     /**
@@ -103,13 +120,5 @@ public class Day10 extends PuzzleSolution {
         }
 
         return reachableTops;
-    }
-
-    public static void main(String[] args) {
-        Day10 day10 = new Day10("src/main/resources/10.txt");
-        Long part1Solution = day10.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day10.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

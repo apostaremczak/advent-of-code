@@ -7,6 +7,29 @@ import java.util.regex.Pattern;
 public class Day01 extends PuzzleSolution {
     List<List<Long>> parsedInput;
 
+    public Day01(String inputFilename) {
+        super(inputFilename);
+        parsedInput = parseInput(inputLines);
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day01 day = new Day01("src/main/resources/01.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     private List<List<Long>> parseInput(String[] input) {
         Pattern locationPattern = Pattern.compile("(\\d+)\\s+(\\d+)");
         List<Long> left = new ArrayList<>();
@@ -22,11 +45,6 @@ public class Day01 extends PuzzleSolution {
             }
         }
         return Arrays.asList(left, right);
-    }
-
-    public Day01(String inputFilename) {
-        super(inputFilename);
-        parsedInput = parseInput(inputLines);
     }
 
     @Override
@@ -60,13 +78,5 @@ public class Day01 extends PuzzleSolution {
         }
 
         return result;
-    }
-
-    public static void main(String[] args) {
-        Day01 day01 = new Day01("src/main/resources/01.txt");
-        Long part1Solution = day01.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day01.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

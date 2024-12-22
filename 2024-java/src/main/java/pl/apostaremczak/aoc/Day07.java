@@ -9,6 +9,24 @@ public class Day07 extends PuzzleSolution {
         super(inputFilename);
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day07 day = new Day07("src/main/resources/07.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         return Arrays.stream(inputLines)
@@ -26,14 +44,7 @@ public class Day07 extends PuzzleSolution {
                 .filter(Equation::canPlaceOperatorsWithConcat)
                 .map(eq -> eq.Result)
                 .mapToLong(i -> i)
-                .sum();    }
-
-    public static void main(String[] args) {
-        Day07 day07 = new Day07("src/main/resources/07.txt");
-        Long part1Solution = day07.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day07.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
+                .sum();
     }
 }
 
@@ -94,7 +105,7 @@ class Equation {
         boolean canAdd = canPlaceOperatorsWithConcat(goal, currentValue + nextElement, currentIndex + 1);
         boolean canMultiply = canPlaceOperatorsWithConcat(goal, multiplicationBase * nextElement, currentIndex + 1);
         boolean canConcat = canPlaceOperatorsWithConcat(goal, Long.parseLong(concatenationBase + nextElement), currentIndex + 1);
-        return  canConcat || canMultiply || canAdd;
+        return canConcat || canMultiply || canAdd;
     }
 
     public boolean canPlaceOperatorsWithConcat() {

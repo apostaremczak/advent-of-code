@@ -1,11 +1,32 @@
 package pl.apostaremczak.aoc;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class Day11 extends PuzzleSolution {
     public Day11(String inputFilename) {
         super(inputFilename);
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day11 day = new Day11("src/main/resources/11.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
     }
 
     @Override
@@ -26,14 +47,6 @@ public class Day11 extends PuzzleSolution {
         }
 
         return collection.countAll();
-    }
-
-    public static void main(String[] args) {
-        Day11 day11 = new Day11("src/main/resources/11.txt");
-        Long part1Solution = day11.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day11.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 

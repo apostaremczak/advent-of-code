@@ -13,6 +13,24 @@ public class Day21 extends PuzzleSolution {
         super(inputFilename);
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day21 day = new Day21("src/main/resources/21.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         return solveForNRobots(3);
@@ -31,14 +49,6 @@ public class Day21 extends PuzzleSolution {
             result += minValue * numericValue;
         }
         return result;
-    }
-
-    public static void main(String[] args) {
-        Day21 day21 = new Day21("src/main/resources/21.txt");
-        Long part1Solution = day21.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day21.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 
     // Great caching technique from https://www.reddit.com/r/adventofcode/comments/1hj2odw/comment/m343kus/
@@ -74,10 +84,10 @@ public class Day21 extends PuzzleSolution {
 }
 
 class Keypad {
-    private final Map<Character, Coord2D> Buttons = new HashMap<>();
     public static Character EmptyMove = ' ';
     public static Character[][] NumericButtons = {{'7', '8', '9'}, {'4', '5', '6'}, {'1', '2', '3'}, {Keypad.EmptyMove, '0', 'A'}};
     public static Character[][] DirectionalButtons = {{Keypad.EmptyMove, '^', 'A'}, {'<', 'v', '>'}};
+    private final Map<Character, Coord2D> Buttons = new HashMap<>();
     private final Coord2D EmptySpotLocation;
 
     public Keypad(Character[][] buttons) {
@@ -91,16 +101,16 @@ class Keypad {
         EmptySpotLocation = Buttons.get(EmptyMove);
     }
 
-    public Integer size() {
-        return Buttons.size();
-    }
-
     public static Keypad buildNumeric() {
         return new Keypad(NumericButtons);
     }
 
     public static Keypad buildDirectional() {
         return new Keypad(DirectionalButtons);
+    }
+
+    public Integer size() {
+        return Buttons.size();
     }
 
     public Set<String> allMovesBetweenButtons(Character fromChar, Character toChar) {

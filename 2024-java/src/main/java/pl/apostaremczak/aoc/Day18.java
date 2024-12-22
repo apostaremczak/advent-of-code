@@ -16,6 +16,24 @@ public class Day18 extends PuzzleSolution {
         this.PartOneLimit = partOneLimit;
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day18 day = new Day18("src/main/resources/18.txt", 70, 70, 1024);
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         NodeMaze maze = NodeMaze.fromInputLines(Arrays.copyOfRange(inputLines, 0, PartOneLimit), MaxRowIdx, MaxColumnIdx);
@@ -34,14 +52,6 @@ public class Day18 extends PuzzleSolution {
             }
         }
         return 0L;
-    }
-
-    public static void main(String[] args) {
-        Day18 day18 = new Day18("src/main/resources/18.txt", 70, 70, 1024);
-        Long part1Solution = day18.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day18.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 
@@ -83,9 +93,18 @@ class Node implements Comparable<Node> {
 }
 
 class NodeMaze {
+    public final Map<Coord2D, Node> Tiles;
     private final Coord2D StartNodePosition;
     private final Coord2D EndNodePosition;
-    public final Map<Coord2D, Node> Tiles;
+
+    public NodeMaze(Set<Coord2D> nodes, Coord2D start, Coord2D end) {
+        Tiles = new HashMap<>();
+        nodes.forEach(position -> {
+            Tiles.put(position, new Node(position));
+        });
+        this.StartNodePosition = start;
+        this.EndNodePosition = end;
+    }
 
     public static NodeMaze fromInputLines(String[] inputLines, Integer maxRowIdx, Integer maxColumnIdx) {
         Set<Coord2D> walls = new HashSet<>();
@@ -106,13 +125,14 @@ class NodeMaze {
         return new NodeMaze(nodes, new Coord2D(0, 0), new Coord2D(maxRowIdx, maxColumnIdx));
     }
 
-    public NodeMaze(Set<Coord2D> nodes, Coord2D start, Coord2D end) {
-        Tiles = new HashMap<>();
-        nodes.forEach(position -> {
-            Tiles.put(position, new Node(position));
-        });
-        this.StartNodePosition = start;
-        this.EndNodePosition = end;
+    private static void calculateMinimumDistance(Node evaluationTile, Node sourceTile) {
+        int sourceDistance = sourceTile.getDistance();
+        if (sourceDistance + 1 <= evaluationTile.getDistance()) {
+            LinkedList<Node> shortestPath = new LinkedList<>(sourceTile.getShortestPath());
+            evaluationTile.setDistance(sourceDistance + 1);
+            shortestPath.add(sourceTile);
+            evaluationTile.setShortestPath(shortestPath);
+        }
     }
 
     @Override
@@ -158,16 +178,6 @@ class NodeMaze {
             }
 
             settledTiles.add(currentNode);
-        }
-    }
-
-    private static void calculateMinimumDistance(Node evaluationTile, Node sourceTile) {
-        int sourceDistance = sourceTile.getDistance();
-        if (sourceDistance + 1 <= evaluationTile.getDistance()) {
-            LinkedList<Node> shortestPath = new LinkedList<>(sourceTile.getShortestPath());
-            evaluationTile.setDistance(sourceDistance + 1);
-            shortestPath.add(sourceTile);
-            evaluationTile.setShortestPath(shortestPath);
         }
     }
 

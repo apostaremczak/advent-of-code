@@ -14,6 +14,30 @@ public class Day05 extends PuzzleSolution {
         this.printingManual = new PrintingManual(fullRawInput);
     }
 
+    public static Integer getMiddleValue(List<String> line) {
+        assert line.size() % 2 == 1;
+        String middleValue = line.get((line.size() - 1) / 2);
+        return Integer.parseInt(middleValue);
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day05 day = new Day05("src/main/resources/05.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         Stream<List<String>> validUpdates = this.printingManual.Updates.stream().filter(printingManual::isValid);
@@ -30,20 +54,6 @@ public class Day05 extends PuzzleSolution {
     private Long sumMiddleValues(Stream<List<String>> updates) {
         Stream<Integer> middleValues = updates.map(Day05::getMiddleValue);
         return middleValues.mapToLong(i -> i).sum();
-    }
-
-    public static Integer getMiddleValue(List<String> line) {
-        assert line.size() % 2 == 1;
-        String middleValue = line.get((line.size() - 1) / 2);
-        return Integer.parseInt(middleValue);
-    }
-
-    public static void main(String[] args) {
-        Day05 day05 = new Day05("src/main/resources/05.txt");
-        Long part1Solution = day05.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day05.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 

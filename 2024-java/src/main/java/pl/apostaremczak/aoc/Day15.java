@@ -11,6 +11,24 @@ public class Day15 extends PuzzleSolution implements DirectionSupport {
         super(inputFilename);
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day15 day = new Day15("src/main/resources/15.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         var splitInput = this.fullRawInput.split("\n\n");
@@ -208,14 +226,6 @@ public class Day15 extends PuzzleSolution implements DirectionSupport {
         }
 
         return new HashSet<>(boxMap.values()).stream().map(Box::gpsCoordinate).mapToLong(l -> l).sum();
-    }
-
-    public static void main(String[] args) {
-        Day15 day15 = new Day15("src/main/resources/15.txt");
-        Long part1Solution = day15.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day15.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 

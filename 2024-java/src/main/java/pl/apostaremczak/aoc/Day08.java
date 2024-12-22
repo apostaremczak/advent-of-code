@@ -32,6 +32,24 @@ public class Day08 extends PuzzleSolution {
         this.Antennas = antennas;
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day08 day = new Day08("src/main/resources/08.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         Set<Coord2D> antipodes = new HashSet<>();
@@ -100,13 +118,5 @@ public class Day08 extends PuzzleSolution {
             antipodes.addAll(findAllAntipodes(antennaGroup));
         }
         return (long) antipodes.size();
-    }
-
-    public static void main(String[] args) {
-        Day08 day08 = new Day08("src/main/resources/08.txt");
-        Long part1Solution = day08.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day08.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

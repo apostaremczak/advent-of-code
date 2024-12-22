@@ -8,13 +8,32 @@ public class Day02 extends PuzzleSolution {
     private final HashSet<Long> AllowedDecreases = new HashSet<>(Arrays.asList(-1L, -2L, -3L));
     private final List<List<Long>> parsedInput;
 
+    public Day02(String inputFilename) {
+        super(inputFilename);
+        this.parsedInput = parseInput(inputLines);
+    }
+
     private static List<List<Long>> parseInput(String[] input) {
         return Arrays.stream(input).map(line -> Arrays.stream(line.split(" ")).map(Long::parseLong).collect(Collectors.toList())).collect(Collectors.toList());
     }
 
-    public Day02(String inputFilename) {
-        super(inputFilename);
-        this.parsedInput = parseInput(inputLines);
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day02 day = new Day02("src/main/resources/02.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
     }
 
     @Override
@@ -46,13 +65,5 @@ public class Day02 extends PuzzleSolution {
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        Day02 day02 = new Day02("src/main/resources/02.txt");
-        Long part1Solution = day02.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day02.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }

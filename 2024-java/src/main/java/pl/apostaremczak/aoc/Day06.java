@@ -3,7 +3,9 @@ package pl.apostaremczak.aoc;
 import pl.apostaremczak.aoc.util.Coord2D;
 import pl.apostaremczak.aoc.util.DirectionSupport;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class Day06 extends PuzzleSolution implements DirectionSupport {
     final private Coord2D startingPosition;
@@ -39,6 +41,24 @@ public class Day06 extends PuzzleSolution implements DirectionSupport {
 
         this.startingPosition = position;
         this.startingDirection = direction;
+    }
+
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day06 day = new Day06("src/main/resources/06.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
     }
 
     @Override
@@ -140,14 +160,6 @@ public class Day06 extends PuzzleSolution implements DirectionSupport {
 
     private boolean isWithinMapBounds(Coord2D position) {
         return position.row() >= 0 && position.column() >= 0 && position.row() <= MaxRow && position.column() <= MaxColumn;
-    }
-
-    public static void main(String[] args) {
-        Day06 day06 = new Day06("src/main/resources/06.txt");
-        Long part1Solution = day06.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day06.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 
     /**

@@ -17,6 +17,25 @@ public class Day14 extends PuzzleSolution {
         this.numColumns = numColumns;
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day14 day = new Day14("src/main/resources/14.txt", 103, 101);
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+
+    }
+
     @Override
     public Long solvePart1() {
         List<Robot> movedRobots = Arrays.stream(this.inputLines)
@@ -37,7 +56,6 @@ public class Day14 extends PuzzleSolution {
 
         return robotsFirstQuadrant.count() * robotsSecondQuadrant.count() * robotsThirdQuadrant.count() * robotsFourthQuadrant.count();
     }
-
 
     @Override
     public Long solvePart2() {
@@ -73,14 +91,6 @@ public class Day14 extends PuzzleSolution {
             }
             System.out.println(rowRepresentation);
         }
-    }
-
-    public static void main(String[] args) {
-        Day14 day14 = new Day14("src/main/resources/14.txt", 103, 101);
-        Long part1Solution = day14.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day14.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
     }
 }
 

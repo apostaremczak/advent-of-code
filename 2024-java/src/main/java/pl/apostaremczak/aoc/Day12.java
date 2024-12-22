@@ -15,26 +15,34 @@ public class Day12 extends PuzzleSolution {
         this.farm = farm;
     }
 
+    public static void main(String[] args) {
+        long startTotal = System.currentTimeMillis();
+        Day12 day = new Day12("src/main/resources/12.txt");
+
+        long startPart1 = System.currentTimeMillis();
+        Long part1Solution = day.solvePart1();
+        long endPart1 = System.currentTimeMillis();
+        System.out.println("Part 1: " + part1Solution + " (Time: " + (endPart1 - startPart1) + " ms)");
+
+        long startPart2 = System.currentTimeMillis();
+        Long part2Solution = day.solvePart2();
+        long endPart2 = System.currentTimeMillis();
+        System.out.println("Part 2: " + part2Solution + " (Time: " + (endPart2 - startPart2) + " ms)");
+
+        long endTotal = System.currentTimeMillis();
+        System.out.println("Total time: " + (endTotal - startTotal) + " ms");
+    }
+
     @Override
     public Long solvePart1() {
         return this.farm.totalPrice();
     }
 
-
     @Override
     public Long solvePart2() {
         return this.farm.bulkPrice();
     }
-
-    public static void main(String[] args) {
-        Day12 day12 = new Day12("src/main/resources/12.txt");
-        Long part1Solution = day12.solvePart1();
-        System.out.println("Part 1: " + part1Solution);
-        Long part2Solution = day12.solvePart2();
-        System.out.println("Part 2: " + part2Solution);
-    }
 }
-
 
 class Farm {
     Map<Coord2D, Character> map;
