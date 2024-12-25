@@ -60,34 +60,34 @@ public class Day24 extends PuzzleSolution {
 
     @Override
     public Long solvePart2() {
-        Set<String> incorrectZPositions = new HashSet<>();
-
-        i_position:
-        for (long i = 0; i < 45; i++) {
-            for (long x = (long) Math.pow(2, i); x <= Math.pow(2, i); x++) {
-                long y = 0L;
-                String binaryX = BinaryAddition.toBinary(x);
-                String binaryY = BinaryAddition.toBinary(y);
-                String zResult = BinaryAddition.sumOf(binaryX, binaryY, Instructions);
-                String expectedZ = BinaryAddition.toBinary(x + y);
-
-                if (!zResult.equals(expectedZ)) {
-                    incorrectZPositions.add(padGateName("z", (int) i));
-                    System.out.println("Incorrect result for x = " + x + ", y = " + y + "; i = " + i);
-                    System.out.println("  " + binaryX);
-                    System.out.println("+ " + binaryY);
-                    System.out.println("--------------------------------------------------------");
-                    System.out.println("  " + zResult);
-
-                    System.out.println("Expected:");
-                    System.out.println("  " + expectedZ);
-                    System.out.println("\n\n");
-                    continue i_position;
-                }
-            }
-        }
-
-        System.out.println(incorrectZPositions);
+//        Set<String> incorrectZPositions = new HashSet<>();
+//
+//        i_position:
+//        for (long i = 0; i < 45; i++) {
+//            for (long x = (long) Math.pow(2, i); x <= Math.pow(2, i); x++) {
+//                long y = 0L;
+//                String binaryX = BinaryAddition.toBinary(x);
+//                String binaryY = BinaryAddition.toBinary(y);
+//                String zResult = BinaryAddition.sumOf(binaryX, binaryY, Instructions);
+//                String expectedZ = BinaryAddition.toBinary(x + y);
+//
+//                if (!zResult.equals(expectedZ)) {
+//                    incorrectZPositions.add(padGateName("z", (int) i));
+//                    System.out.println("Incorrect result for x = " + x + ", y = " + y + "; i = " + i);
+//                    System.out.println("  " + binaryX);
+//                    System.out.println("+ " + binaryY);
+//                    System.out.println("--------------------------------------------------------");
+//                    System.out.println("  " + zResult);
+//
+//                    System.out.println("Expected:");
+//                    System.out.println("  " + expectedZ);
+//                    System.out.println("\n\n");
+//                    continue i_position;
+//                }
+//            }
+//        }
+//
+//        System.out.println(incorrectZPositions);
 
 //        for (String incorrectZPosition : incorrectZPositions) {
 //            print(incorrectZPosition);
